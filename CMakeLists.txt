@@ -10,18 +10,27 @@ set(CMAKE_AUTOUIC ON)
 
 
 list(APPEND CMAKE_PREFIX_PATH "C:/Qt/6.9.1/mingw_64/lib/cmake")
-find_package(Qt6 REQUIRED COMPONENTS Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Widgets Svg SvgWidgets)
 
 set(PROJECT_SOURCES
-    main.cpp
-    MainWindow.cpp
-    MainWindow.h
-    StartScreen.cpp
-    StartScreen.h
-    GameScreen.cpp
-    GameScreen.h
+    src/main.cpp
+
+    src/UI/MainWindow.cpp
+    src/UI/MainWindow.h
+
+    src/UI/home_screen/StartScreen.cpp
+    src/UI/home_screen/StartScreen.h
+    src/UI/game_screen/GameScreen.cpp
+    src/UI/game_screen/GameScreen.h
 )
 
 add_executable(Chess-application ${PROJECT_SOURCES})
 
-target_link_libraries(Chess-application PRIVATE Qt6::Widgets)
+target_include_directories(Chess-application PRIVATE
+    src
+    src/UI
+    src/UI/home_screen
+    src/UI/game_screen
+)
+
+target_link_libraries(Chess-application PRIVATE Qt6::Widgets Qt6::Svg Qt6::SvgWidgets)
