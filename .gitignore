@@ -1,0 +1,49 @@
+# build folders
+build/
+out/
+dist/
+bin/
+
+
+*.o
+*.a
+*.so
+*.exe
+*.dll
+*.pdb
+*.ilk
+*.lib
+*.exp
+*.obj
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+.cmake/
+
+# Qt stuff
+moc_*.cpp
+qrc_*.cpp
+ui_*.h
+*.pro.user
+*.qm
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.cache/
+.clangd/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# environment
+.env
+.env.local
