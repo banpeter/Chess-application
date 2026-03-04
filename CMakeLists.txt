@@ -16,6 +16,10 @@ set(PROJECT_SOURCES
     main.cpp
     MainWindow.cpp
     MainWindow.h
+    StartScreen.cpp
+    StartScreen.h
+    GameScreen.cpp
+    GameScreen.h
 )
 
 add_executable(Chess-application ${PROJECT_SOURCES})
