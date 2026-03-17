@@ -3,11 +3,11 @@
 #include <QWidget>
 #include <QPushButton>
 
-class StartScreen : public QWidget {
+class HomeScreen : public QWidget {
     Q_OBJECT
 
 public:
-    explicit StartScreen(QWidget *parent = nullptr);
+    explicit HomeScreen(QWidget *parent = nullptr);
 
 signals:
     void startGameRequested(); 

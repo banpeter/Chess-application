@@ -18,10 +18,12 @@ set(PROJECT_SOURCES
     src/UI/MainWindow.cpp
     src/UI/MainWindow.h
 
-    src/UI/home_screen/StartScreen.cpp
-    src/UI/home_screen/StartScreen.h
+    src/UI/home_screen/HomeScreen.cpp
+    src/UI/home_screen/HomeScreen.h
     src/UI/game_screen/GameScreen.cpp
     src/UI/game_screen/GameScreen.h
+
+    resources.qrc
 )
 
 add_executable(Chess-application ${PROJECT_SOURCES})

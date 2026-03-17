@@ -1,0 +1,17 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/">
+        <file>resources/pieces/bishop-b.svg</file>
+        <file>resources/pieces/bishop-w.svg</file>
+        <file>resources/pieces/king-b.svg</file>
+        <file>resources/pieces/king-w.svg</file>
+        <file>resources/pieces/knight-b.svg</file>
+        <file>resources/pieces/knight-w.svg</file>
+        <file>resources/pieces/pawn-b.svg</file>
+        <file>resources/pieces/pawn-w.svg</file>
+        <file>resources/pieces/queen-b.svg</file>
+        <file>resources/pieces/queen-w.svg</file>
+        <file>resources/pieces/rook-b.svg</file>
+        <file>resources/pieces/rook-w.svg</file>
+    </qresource>
+</RCC>

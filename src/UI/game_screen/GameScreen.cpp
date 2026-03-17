@@ -27,10 +27,17 @@ GameScreen::GameScreen(QWidget *parent) : QWidget(parent) {
 
     drawBoard();
 
-
     mainLayout->addLayout(topBarLayout);
     mainLayout->addWidget(boardView, 0, Qt::AlignCenter); 
-
+    
+    
+    whiteKnight = new QGraphicsSvgItem(":resources/pieces/knight-w.svg");
+    whiteKnight->setPos(60, 0);
+    whiteKnight->setFlag(QGraphicsItem::ItemIsMovable, true);
+    whiteKnight->setZValue(1);
+    boardScene->addItem(whiteKnight);
+    
+    
     // connections
     connect(backButton, &QPushButton::clicked, this, &GameScreen::backToMenuRequested);
 }

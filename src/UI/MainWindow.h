@@ -1,6 +1,6 @@
 #pragma once
 
-#include "StartScreen.h"
+#include "HomeScreen.h"
 #include "GameScreen.h"
 #include <QMainWindow>
 #include <QStackedWidget>
@@ -14,11 +14,11 @@ public:
 
 private slots:
     void showGameScreen();
-    void showStartScreen();
+    void showHomeScreen();
 
 private:
     QStackedWidget *stackedWidget;
 
-    StartScreen *startScreen;
+    HomeScreen *homeScreen;
     GameScreen *gameScreen;
 };

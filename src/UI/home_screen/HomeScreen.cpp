@@ -1,10 +1,10 @@
-#include "StartScreen.h"
+#include "HomeScreen.h"
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QApplication>
 #include <QFont>
 
-StartScreen::StartScreen(QWidget *parent) : QWidget(parent) {
+HomeScreen::HomeScreen(QWidget *parent) : QWidget(parent) {
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     QLabel *titleLabel = new QLabel("Sakkocska", this);
@@ -30,6 +30,6 @@ StartScreen::StartScreen(QWidget *parent) : QWidget(parent) {
 
 
     
-    connect(playButton, &QPushButton::clicked, this, &StartScreen::startGameRequested);
+    connect(playButton, &QPushButton::clicked, this, &HomeScreen::startGameRequested);
     connect(quitButton, &QPushButton::clicked, qApp, &QApplication::quit);
 }

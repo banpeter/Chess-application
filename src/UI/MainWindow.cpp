@@ -9,16 +9,16 @@ MainWindow::MainWindow(QWidget *parent)
 
     stackedWidget = new QStackedWidget(this);
 
-    startScreen = new StartScreen(this);
+    homeScreen = new HomeScreen(this);
     gameScreen = new GameScreen(this);
 
-    stackedWidget->addWidget(startScreen);
+    stackedWidget->addWidget(homeScreen);
     stackedWidget->addWidget(gameScreen);
 
     setCentralWidget(stackedWidget);
 
-    connect(startScreen, &StartScreen::startGameRequested, this, &MainWindow::showGameScreen);
-    connect(gameScreen, &GameScreen::backToMenuRequested, this, &MainWindow::showStartScreen);
+    connect(homeScreen, &HomeScreen::startGameRequested, this, &MainWindow::showGameScreen);
+    connect(gameScreen, &GameScreen::backToMenuRequested, this, &MainWindow::showHomeScreen);
 }
 
 MainWindow::~MainWindow() {
@@ -29,6 +29,6 @@ void MainWindow::showGameScreen() {
     stackedWidget->setCurrentWidget(gameScreen);
 }
 
-void MainWindow::showStartScreen() {
-    stackedWidget->setCurrentWidget(startScreen);
+void MainWindow::showHomeScreen() {
+    stackedWidget->setCurrentWidget(homeScreen);
 }
