@@ -23,6 +23,9 @@ set(PROJECT_SOURCES
     src/UI/game_screen/GameScreen.cpp
     src/UI/game_screen/GameScreen.h
 
+    src/UI/pieces/ChessPiece.cpp
+    src/UI/pieces/ChessPiece.h
+
     resources.qrc
 )
 
@@ -33,6 +36,7 @@ target_include_directories(Chess-application PRIVATE
     src/UI
     src/UI/home_screen
     src/UI/game_screen
+    src/UI/pieces
 )
 
 target_link_libraries(Chess-application PRIVATE Qt6::Widgets Qt6::Svg Qt6::SvgWidgets)

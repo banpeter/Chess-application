@@ -6,6 +6,8 @@
 #include <QPushButton>
 #include <QGraphicsSvgItem>
 
+#include "ChessPiece.h"
+
 class GameScreen : public QWidget {
     Q_OBJECT
 
@@ -19,7 +21,8 @@ private:
     QPushButton *backButton;
     QGraphicsView *boardView;
     QGraphicsScene *boardScene;
-    QGraphicsSvgItem *whiteKnight;
+
+    ChessPiece *whiteKnight;
 
     void drawBoard();
 };
