@@ -7,7 +7,7 @@
 HomeScreen::HomeScreen(QWidget *parent) : QWidget(parent) {
     QVBoxLayout *layout = new QVBoxLayout(this);
 
-    QLabel *titleLabel = new QLabel("Sakkocska", this);
+    QLabel *titleLabel = new QLabel("Chess application", this);
     titleLabel->setAlignment(Qt::AlignCenter);
     
     QFont titleFont = titleLabel->font();
@@ -15,8 +15,8 @@ HomeScreen::HomeScreen(QWidget *parent) : QWidget(parent) {
     titleFont.setBold(true);
     titleLabel->setFont(titleFont);
 
-    playButton = new QPushButton("Játék indítása", this);
-    quitButton = new QPushButton("Kilépés", this);
+    playButton = new QPushButton("Start game", this);
+    quitButton = new QPushButton("Quit", this);
 
     playButton->setMinimumHeight(40);
     quitButton->setMinimumHeight(40);

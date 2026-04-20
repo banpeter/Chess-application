@@ -7,6 +7,7 @@
 #include <QGraphicsSvgItem>
 
 #include "ChessPiece.h"
+#include "ChessController.h"
 
 class GameScreen : public QWidget {
     Q_OBJECT
@@ -17,12 +18,18 @@ public:
 signals:
     void backToMenuRequested(); 
 
+private slots:
+    void handleMoveRequest(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow);
+
 private:
     QPushButton *backButton;
     QGraphicsView *boardView;
     QGraphicsScene *boardScene;
 
-    ChessPiece *whiteKnight;
+    ChessPiece* pieceRegistry[8][8];
+
+    ChessController* controller;
 
     void drawBoard();
+    void setupPiece(const QString& svgPath, int col, int row, const QString& pieceID);
 };

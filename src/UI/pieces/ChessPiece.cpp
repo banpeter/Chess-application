@@ -11,12 +11,13 @@ ChessPiece::ChessPiece(const QString &fileName, QGraphicsItem *parent)
 void ChessPiece::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsSvgItem::mouseReleaseEvent(event);
 
-    qreal currentX = pos().x();
-    qreal currentY = pos().y();
+    int toCol = std::floor((pos().x() + 30) / 60.0);
+    int toRow = std::floor((pos().y() + 30) / 60.0);
 
-    int squareSize = 60;
-    qreal gridX = std::floor((currentX + squareSize / 2.0) / squareSize) * squareSize;
-    qreal gridY = std::floor((currentY + squareSize / 2.0) / squareSize) * squareSize;
+    if (toCol < 0 || toCol > 7 || toRow < 0 || toRow > 7) {
+        setPos(currentCol * 60, currentRow * 60);
+        return;
+    }
 
-    setPos(gridX, gridY);
+    emit moveRequested(this, currentCol, currentRow, toCol, toRow);
 }

@@ -25,6 +25,8 @@ set(PROJECT_SOURCES
 
     src/UI/pieces/ChessPiece.cpp
     src/UI/pieces/ChessPiece.h
+    src/UI/ChessController.cpp
+    src/UI/ChessController.h
 
     resources.qrc
 )
