@@ -7,7 +7,11 @@ class Board {
 
     std::vector<std::vector<int>> board;
     std::vector<std::vector<int>> free_spaces;
+
+    //get valid moves, base on piece postions validate correct ones
 };
+
+
 
 
 class Position {
@@ -37,17 +41,50 @@ class GamedInitialization {
 class Piece {
     public:
         int x, y;
+        Position position;
+        std::string name;
+        const std::vector<std::vector<int>> moves;
+        Piece(const int x, const int y) : x(x), y(y), position(x,y) {
+            }
 
-    static void print_position(){}
-    Position get_position() const { return Position(x, y); }
+        static void print_position(){}
+        Position get_position() const { return Position(x, y); }
+        std::vector<std::vector<Position>> get_valid_moves() const {}
+
+        void set_position(const Position& pos) { x=pos.x; y=pos.y; }
+
 };
 
-class Horse {
+class Player {
+public:
+    std::string name;
+    std::string color;
+    std::vector<std::vector<Piece>> pieces_pawns;
+    std::vector<std::vector<Piece>> pieces;
+    static void print_pieces(){}
+    std::vector<std::vector<Position>> get_positions() const {}
+};
+
+
+class Knight {
     int x;
     int y;
     const std::vector<std::vector<int>> moves = {{2,1},  {2,-1},  {-2,1}, {-2,-1}, {1, 2}, {-1,2},{-1, -2}, {1,-2}  };
 
-    Horse(const int x, const int y) : x(x), y(y) {}
+    Knight(const int x, const int y) : x(x), y(y) {}
+
+    //for example the position change of the rook is based on the intou
+    static void change_position(const int x, const int y) {}
+
+    static void show_piece_name() { std::cout << "Value: " << "Horse" << std::endl;}
+};
+
+class Bishop {
+    int x;
+    int y;
+    const std::vector<std::vector<int>> moves = {{2,1},  {2,-1},  {-2,1}, {-2,-1}, {1, 2}, {-1,2},{-1, -2}, {1,-2}  };
+
+    Bishop(const int x, const int y) : x(x), y(y) {}
 
     //for example the position change of the rook is based on the intou
     static void change_position(const int x, const int y) {}
@@ -56,6 +93,47 @@ class Horse {
 };
 
 
+
+class Rook {
+    int x;
+    int y;
+    const std::vector<std::vector<int>> moves = {{2,1},  {2,-1},  {-2,1}, {-2,-1}, {1, 2}, {-1,2},{-1, -2}, {1,-2}  };
+
+    Rook(const int x, const int y) : x(x), y(y) {}
+
+    //for example the position change of the rook is based on the intou
+    static void change_position(const int x, const int y) {}
+
+    static void show_piece_name() { std::cout << "Value: " << "Horse" << std::endl;}
+};
+
+
+class King {
+    int x;
+    int y;
+    const std::vector<std::vector<int>> moves = {{2,1},  {2,-1},  {-2,1}, {-2,-1}, {1, 2}, {-1,2},{-1, -2}, {1,-2}  };
+
+    King(const int x, const int y) : x(x), y(y) {}
+
+    //for example the position change of the rook is based on the intou
+    static void change_position(const int x, const int y) {}
+
+    static void show_piece_name() { std::cout << "Value: " << "Horse" << std::endl;}
+};
+
+
+class Queen {
+    int x;
+    int y;
+    const std::vector<std::vector<int>> moves = {{2,1},  {2,-1},  {-2,1}, {-2,-1}, {1, 2}, {-1,2},{-1, -2}, {1,-2}  };
+
+    Queen(const int x, const int y) : x(x), y(y) {}
+
+    //for example the position change of the rook is based on the intou
+    static void change_position(const int x, const int y) {}
+
+    static void show_piece_name() { std::cout << "Value: " << "Horse" << std::endl;}
+};
 
 class Pawn {
     int x;
