@@ -24,18 +24,32 @@ public:
 
         return false;
     }
+    bool inside() {
 
+        if (x >= 0 && x <= 8 && y >= 0 && y <= 8) {
+            return true;
+        }
+        return false;
+    }
+};
 
+class Moves {
+    public:
+    std::vector<Position> moves;
+    std::vector<Position> captures;
+    Moves(const std::vector<Position>& moves, const std::vector<Position>& captures) : moves(moves), captures(captures) {}
 
 };
 
-
+class Board;
 //TODO castle and double at generating moves, and upgrade as well
+using MoveFunction = Moves(*)(const Board&, Position);
 
 class Piece {
 public:
     Position position;
     const std::string name;
+    MoveFunction rook_moves_generation;
     bool moved = false;
     const std::vector<std::vector<int>> moves;
     Piece(const std::string& name, const Position position) : position(position), name(name) {
@@ -137,8 +151,285 @@ class Board {
 };
 
 
+bool check_postion(const Position p1, const Position p2) {
+    if (p1.x == p2.x && p1.y == p2.y) {
+        return true;
+    }
+    return false;
+}
 
 
+bool check_move(const Board& board, const Position current_pos) {
+
+    int overlap = -1;
+
+    for (const auto& player : board.players) {
+        for (const auto& pl : player.pieces) {
+            if (check_postion(current_pos,pl.position)) {
+                overlap++;
+                if (overlap == 1) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+bool validate(Position current_position, Position next_position,Board board) {
+
+    //TODO pass these as pointers
+    std::vector<Position> moves;
+    std::vector<Position> captures;
+
+    bool inside = true;
+    bool capture = false;
+
+    inside = next_position.inside();
+    capture = check_move(board,current_position);//TODO
+
+    if (inside && !capture) {
+        moves.push_back(next_position);
+    }
+    else if (inside && capture) {
+        captures.push_back(next_position);
+
+    }
+    else if (!inside) {
+       return false;
+    }
+
+
+    return false;
+}
+
+
+Moves rook_moves(const Board& board, Position current_position_of_chosen_piece) {
+    std::vector<Position> moves_pos;
+    std::vector<Position> captures;
+    Position next_position = current_position_of_chosen_piece;
+    bool inside = true;
+    bool capture = false;
+
+    bool generate = true;
+
+    for (int i = 0; i < 4; i++) {
+        while (generate) {
+            next_position.x++;
+            //check inside
+            inside = next_position.inside();
+            capture = check_move(board,current_position_of_chosen_piece);//TODO
+
+            if (inside && !capture) {
+                moves_pos.push_back(next_position);
+            }
+            else if (inside && capture) {
+                captures.push_back(next_position);
+                generate = false;
+            }
+            else if (!inside) {
+                generate = false;
+            }
+
+        }
+        next_position = current_position_of_chosen_piece;
+        while (next_position.inside()) {
+            next_position.x--;
+            inside = next_position.inside();
+            capture = check_move(board,current_position_of_chosen_piece);//TODO
+
+            if (inside && !capture) {
+                moves_pos.push_back(next_position);
+            }
+            else if (inside && capture) {
+                captures.push_back(next_position);
+                generate = false;
+            }
+            else if (!inside) {
+                generate = false;
+            }
+        }
+        next_position = current_position_of_chosen_piece;
+        while (next_position.inside()) {
+            next_position.y++;
+            inside = next_position.inside();
+            capture = check_move(board,current_position_of_chosen_piece);//TODO
+
+            if (inside && !capture) {
+                moves_pos.push_back(next_position);
+            }
+            else if (inside && capture) {
+                captures.push_back(next_position);
+                generate = false;
+            }
+            else if (!inside) {
+                generate = false;
+            }
+        }
+        next_position = current_position_of_chosen_piece;
+        while (next_position.inside()) {
+            next_position.y--;
+            inside = next_position.inside();
+            capture = check_move(board,current_position_of_chosen_piece);//TODO
+
+            if (inside && !capture) {
+                moves_pos.push_back(next_position);
+            }
+            else if (inside && capture) {
+                captures.push_back(next_position);
+                generate = false;
+            }
+            else if (!inside) {
+                generate = false;
+            }
+        }
+    }
+
+    auto moves = Moves(moves_pos,captures);
+    return moves;
+}
+
+Moves bishop_moves(const Board& board, Position current_position_of_chosen_piece) {
+    std::vector<Position> moves_pos;
+    std::vector<Position> captures;
+    Position next_position = current_position_of_chosen_piece;
+    bool inside = true;
+    bool capture = false;
+
+    bool generate = true;
+
+    for (int i = 0; i < 4; i++) {
+        while (generate) {
+            next_position.x++;
+            next_position.y++;
+            //check inside
+            inside = next_position.inside();
+            capture = check_move(board,current_position_of_chosen_piece);//TODO
+
+            if (inside && !capture) {
+                moves_pos.push_back(next_position);
+            }
+            else if (inside && capture) {
+                captures.push_back(next_position);
+                generate = false;
+            }
+            else if (!inside) {
+                generate = false;
+            }
+
+        }
+        next_position = current_position_of_chosen_piece;
+        while (next_position.inside()) {
+            next_position.x--;
+            next_position.y--;
+            inside = next_position.inside();
+            capture = check_move(board,current_position_of_chosen_piece);//TODO
+
+            if (inside && !capture) {
+                moves_pos.push_back(next_position);
+            }
+            else if (inside && capture) {
+                captures.push_back(next_position);
+                generate = false;
+            }
+            else if (!inside) {
+                generate = false;
+            }
+        }
+        next_position = current_position_of_chosen_piece;
+        while (next_position.inside()) {
+            next_position.x--;
+            next_position.y++;
+            inside = next_position.inside();
+            capture = check_move(board,current_position_of_chosen_piece);//TODO
+
+            if (inside && !capture) {
+                moves_pos.push_back(next_position);
+            }
+            else if (inside && capture) {
+                captures.push_back(next_position);
+                generate = false;
+            }
+            else if (!inside) {
+                generate = false;
+            }
+        }
+        next_position = current_position_of_chosen_piece;
+        while (next_position.inside()) {
+            next_position.x++;
+            next_position.y--;
+            inside = next_position.inside();
+            capture = check_move(board,current_position_of_chosen_piece);//TODO
+
+            if (inside && !capture) {
+                moves_pos.push_back(next_position);
+            }
+            else if (inside && capture) {
+                captures.push_back(next_position);
+                generate = false;
+            }
+            else if (!inside) {
+                generate = false;
+            }
+        }
+    }
+
+    auto moves = Moves(moves_pos,captures);
+    return moves;
+}
+
+Moves knight_moves(const Board& board, Position current_position_of_chosen_piece) {
+    std::vector<Position> moves_pos;
+    std::vector<Position> captures;
+    Position next_position = current_position_of_chosen_piece;
+    bool inside = true;
+    bool capture = false;
+
+    const std::vector<std::vector<int>> move_knight = {{2,1},  {2,-1},  {-2,1}, {-2,-1}, {1, 2}, {-1,2},{-1, -2}, {1,-2}  };
+
+    for (auto& move : move_knight) {
+        next_position.x += move[0];
+        next_position.y += move[1];
+        inside = next_position.inside();
+        capture = check_move(board,current_position_of_chosen_piece);
+        if (inside && !capture) {
+            moves_pos.push_back(next_position);
+        }
+        else if (inside && capture) {
+            captures.push_back(next_position);
+        }
+        next_position = current_position_of_chosen_piece;
+    }
+    auto moves = Moves(moves_pos,captures);
+    return moves;
+}
+
+Moves pawn_moves(const Board& board, Position current_position_of_chosen_piece) {
+    std::vector<Position> moves_pos;
+    std::vector<Position> captures;
+    Position next_position = current_position_of_chosen_piece;
+    bool inside = true;
+    bool capture = false;
+
+    const std::vector<std::vector<int>> pawn_knight = {{0,1},  {1,1},  {-1,-1},  {0, 2} };
+
+    for (auto& move : pawn_knight) {
+        next_position.x += move[0];
+        next_position.y += move[1];
+        inside = next_position.inside();
+        capture = check_move(board,current_position_of_chosen_piece);
+        if (inside && !capture) {
+            moves_pos.push_back(next_position);
+        }
+        else if (inside && capture) {
+            captures.push_back(next_position);
+        }
+        next_position = current_position_of_chosen_piece;
+    }
+    auto moves = Moves(moves_pos,captures);
+    return moves;
+}
 
 //TODO check for capturing
 
@@ -218,6 +509,11 @@ int main() {
 
     auto board = Board();
     board.initialize();
+
+    MoveFunction rook_moves_generation = rook_moves;
+    MoveFunction bishop_moves_generation = bishop_moves;
+    MoveFunction knight_moves_generation = knight_moves;
+
     return 0;
     // TIP See CLion help at <a href="https://www.jetbrains.com/help/clion/">jetbrains.com/help/clion/</a>. Also, you can try interactive lessons for CLion by selecting 'Help | Learn IDE Features' from the main menu.
 }
