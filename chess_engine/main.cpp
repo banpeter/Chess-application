@@ -35,8 +35,11 @@ public:
 
 class Moves {
     public:
+    //moves in one direction, is it check ->King ahs possible move outise of those, otehr pices canhas valide move with the moves in one direction
     std::vector<Position> moves;
+    std::vector<std::vector<Position>> moves_sections;
     std::vector<Position> captures;
+    bool check_mate = false;
     Moves(const std::vector<Position>& moves, const std::vector<Position>& captures) : moves(moves), captures(captures) {}
 
 };
@@ -45,6 +48,7 @@ class Board;
 class Piece;
 //TODO castle and double at generating moves, and upgrade as well
 
+//TODO check mate is no valid moves and being attacked + other pieces moves can not block the king??
 using MoveFunction = Moves(*)(const Board&, const Piece&);
 class Piece {
 public:
@@ -64,18 +68,25 @@ public:
     void set_position(const Position& pos) { position.x=pos.x; position.y=pos.y; }
 
 };
-
+//TODO
+/*
+ * Get the other player captures
+ * If a king valid moves are overlapping with those captures  -> check mate
+ *
+ *
+ */
 class Player {
 public:
     std::string name;
     std::string color;
     std::vector<Piece> pieces_pawns;
     std::vector<Piece> pieces;
+    std::vector<Moves> moves; //TODO aggregate moves and captures, maybo not
     Player(const std::string& name, const std::string color) :  name(name), color(color) {
     }
     static void print_pieces(){}
 
-
+    static void aggregate_moves(){}//TODO
     //std::vector<std::vector<Position>> get_positions() const {}
 
     void init_pieces() {
@@ -472,6 +483,8 @@ Moves pawn_moves(const Board& board, const Piece& chosen_piece) {
 
 
 //TODO check for attacked tiles
+
+//TODO if kning_moves is all attacked game voer
 Moves king_moves(const Board& board, const Piece& chosen_piece) {
     std::vector<Position> moves_pos;
     std::vector<Position> captures;
@@ -481,6 +494,21 @@ Moves king_moves(const Board& board, const Piece& chosen_piece) {
 
     const std::vector<std::vector<int>> move_king = {{0,1},  {0,-1},  {-1,0}, {1,0},  {1,1},  {1,-1},  {-1,1}, {-1,-1}};
 
+    const Player *p = nullptr;
+
+    //TODO if order change in initialization this brokes
+    if (chosen_piece.color == "white") {
+        p = &board.players[0];
+    }
+    else {
+        p = &board.players[1];
+    }
+
+    bool free_tile = true;
+    int count_attacked = 0;
+    int free_tile_c = 0;
+
+
 
     for (const auto & i : move_king) {
         next_position.x += i[0];
@@ -488,17 +516,37 @@ Moves king_moves(const Board& board, const Piece& chosen_piece) {
         inside = next_position.inside();
         capture = check_move(board,chosen_piece.position);
 
+
+
+        //free tile
         if (inside && !capture) {
+            free_tile_c++;
             moves_pos.push_back(next_position);
+            for (const auto & move : p->moves) {
+                for (const auto & k : move.moves) {
+                    if (k.x == next_position.x && k.y == next_position.y) {
+                        count_attacked++;
+                    }
+                }
+            }
+
         }
         else if (inside && capture) {
             captures.push_back(next_position);
         }
+
+
+
+
+
         next_position = chosen_piece.position;
 
     }
+    if (free_tile_c == count_attacked) {
 
+    }
     auto moves = Moves(moves_pos,captures);
+    moves.attacked = count_attacked;
     return moves;
 }
 
