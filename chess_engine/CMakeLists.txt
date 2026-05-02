@@ -8,5 +8,6 @@ add_executable(chess_engine src/main.cpp
         include/engine.h
         src/board.cpp
         src/moves.cpp
-        src/helpers.cpp)
+        src/helpers.cpp
+        src/minmax.cpp)
 target_include_directories(chess_engine PRIVATE ${CMAKE_SOURCE_DIR}/include)

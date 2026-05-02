@@ -110,4 +110,9 @@ bool check_move(const Board& board, const Position current_pos);
 bool validate(Position current_position, Position next_position,Board board);
 std::vector<Position> intersection(const std::vector<Position>& moves1, const std::vector<Position> moves2);
 
+
+//minmax
+int value(std::string name);
+int evaluate(const Board& board,std::string color);
+
 #endif //CHESS_ENGINE_ENGINE_H

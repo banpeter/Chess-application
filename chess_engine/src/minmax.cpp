@@ -2,6 +2,11 @@
 // Created by peter on 2026. 04. 26..
 //
 #include <iostream>
+#include <limits>
+
+#include "engine.h"
+
+#define MAX_DEPTH 20
 
 int value(std::string name) {
 
@@ -25,7 +30,71 @@ int value(std::string name) {
     }
 
     return 0;
+}
 
 
+int evaluate(const Board& board,std::string color) {
+    int white_value = 0;
+    int black_value = 0;
+    for(auto p : board.players[0].pieces) {
+        white_value+=value(p.name);
+    }
+    for(auto p : board.players[1].pieces) {
+        black_value+=value(p.name);
+    }
+
+    if (color == "white") {
+        return white_value-black_value;
+    }
+    else if (color == "black") {
+        return black_value-white_value;
+    }
+
+    return 0;
+}
+
+int minimax(const Board& board,int depth, int alpha, int beta,bool is_maximizing) {
+    std::vector<Moves> possible_moves;
+    std::vector<Board> possible_boards;
+
+
+    //for each move create updated board
+
+    //generate_moves
+    for(auto p : board.players[0].pieces) {
+        auto move = p.move(board);
+        possible_moves.push_back(move);
+    }
+
+
+    if (is_maximizing) {
+        int best = std::numeric_limits<int>::min();
+
+        for (const Board& child : possible_boards) {
+            int score = minimax(child, depth - 1, alpha, beta, false);
+            best  = std::max(best, score);
+            alpha = std::max(alpha, best);
+
+            if (beta <= alpha)
+                break;
+        }
+        return best;
+
+    } else {
+        int best = std::numeric_limits<int>::max();
+
+        for (const Board& child : possible_boards) {
+            int score = minimax(child, depth - 1, alpha, beta, true);
+            best = std::min(best, score);
+            beta = std::min(beta, best);
+
+            if (beta <= alpha)
+                break;
+        }
+        return best;
+    }
 
 }
+
+
+//loop for minmax
