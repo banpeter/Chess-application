@@ -45,7 +45,7 @@ public:
     const std::string color;
     MoveFunction moves_generation;
     bool moved = false;
-    std::vector<Moves> moves_history;
+    std::vector<Moves> moves_history;//each Moves represent all possible mvoes from one position
 
     Piece(const std::string& name, const Position position, const std::string color);
     void print_position();
@@ -57,18 +57,13 @@ public:
 
 
 
-
-
-
-
-
 class Player {
 public:
     std::string name;
     std::string color;
     std::vector<Piece> pieces_pawns;
     std::vector<Piece> pieces;
-    std::vector<Moves> moves;
+    std::vector<Moves> moves;//???
     Player(const std::string& name, const std::string color);
     void init_pieces();
 };

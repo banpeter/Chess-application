@@ -97,4 +97,21 @@ int minimax(const Board& board,int depth, int alpha, int beta,bool is_maximizing
 }
 
 
-//loop for minmax
+// Find the best move from root
+int best_move(const Board& root, int depth) {
+    int best_score = std::numeric_limits<int>::min();
+    int best_idx   = -1;
+    int alpha      = std::numeric_limits<int>::min();
+    int beta       = std::numeric_limits<int>::max();
+
+    for (int i = 0; i < root.children.size(); i++) {
+        int score = minimax(root.children[i], depth - 1, alpha, beta, false);
+        if (score > best_score) {
+            best_score = score;
+            best_idx   = i;
+        }
+        alpha = std::max(alpha, best_score);
+    }
+
+    return best_idx;
+}

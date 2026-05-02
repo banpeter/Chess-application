@@ -263,6 +263,10 @@ Moves king_moves(const Board& board, const Piece& chosen_piece) {
     std::vector<Position> moves_pos;
     std::vector<Position> captures;
     Position next_position = chosen_piece.position;
+
+    std::vector<int> captures_mask;
+    std::vector<std::vector<Position>> moves_sections;
+
     bool inside = true;
     bool capture = false;
 
@@ -291,32 +295,36 @@ Moves king_moves(const Board& board, const Piece& chosen_piece) {
         capture = check_move(board,chosen_piece.position);
 
 
-
+        //first do not move where other are
+        bool attacked = false;
         //free tile
         if (inside && !capture) {
             free_tile_c++;
             moves_pos.push_back(next_position);
-            for (const auto & move : p->moves) {
-                for (const auto & k : move.moves) {
-                    if (k.x == next_position.x && k.y == next_position.y) {
-                        count_attacked++;
+            for (const auto & piece : p->pieces) {
+                for (const auto & move : piece.moves_history) {
+                    for (const auto & k : move.moves) {
+                        if (k.x == next_position.x && k.y == next_position.y) {
+                            attacked = true;
+                            break;
+                        }
                     }
+
                 }
             }
-
+            if (!attacked) {
+                moves_pos.push_back(next_position);
+            }
+            if (!attacked && capture) {
+                captures.push_back(next_position);
+            }
         }
-        else if (inside && capture) {
-            captures.push_back(next_position);
-        }
-
         next_position = chosen_piece.position;
-
     }
     if (free_tile_c == count_attacked) {
 
     }
     auto moves = Moves(moves_pos,captures,moves_sections,captures_mask);
-    moves.attacked = count_attacked;
     return moves;
 }
 
