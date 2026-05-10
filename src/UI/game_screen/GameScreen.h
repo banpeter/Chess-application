@@ -5,6 +5,8 @@
 #include <QGraphicsScene>
 #include <QPushButton>
 #include <QGraphicsSvgItem>
+#include <QMessageBox>
+#include <QPushButton>
 
 #include "ChessPiece.h"
 #include "ChessController.h"
@@ -31,5 +33,9 @@ private:
     ChessController* controller;
 
     void drawBoard();
-    void setupPiece(const QString& svgPath, int col, int row, const QString& pieceID);
+    void setupPiece(const QString& svgPath, int col, int row, PieceColor color, PieceType type);
+
+    void showGameOver(const QString& message);
+
+    void handlePawnPromotion(int toCol, int toRow, PieceColor color);
 };

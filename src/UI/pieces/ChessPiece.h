@@ -4,14 +4,32 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QString>
 
+enum class PieceType {
+    Pawn,
+    Rook,
+    Knight,
+    Bishop,
+    Queen,
+    King
+};
+
+enum class PieceColor {
+    White,
+    Black
+};
+
 class ChessPiece : public QGraphicsSvgItem {
     Q_OBJECT
 
 public:
     explicit ChessPiece(const QString &fileName, QGraphicsItem *parent = nullptr);
 
-    void setPieceID(const QString& id) {pieceID = id; }
-    QString getPieceID() const { return pieceID; }
+
+    void setPieceType(PieceType type) { pieceType = type; }
+    PieceType getPieceType() const { return pieceType; }
+
+    void setPieceColor(PieceColor color) { pieceColor = color; }
+    PieceColor getPieceColor() const { return pieceColor; }
 
     void setGridPosition(int col, int row) { 
         currentCol = col; 
@@ -27,6 +45,7 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
-    QString pieceID;
+    PieceType pieceType;
+    PieceColor pieceColor;
     int currentCol, currentRow;
 };

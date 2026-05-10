@@ -4,13 +4,15 @@
 #include <QString>
 #include <QDebug>
 
+#include "ChessPiece.h"
+
 class ChessController : public QObject {
     Q_OBJECT
 
 public:
     explicit ChessController(QObject *parent = nullptr);
 
-    bool isValidMove(const QString& pieceId, int fromCol, int fromRow, int toCol, int toRow);
+    bool isValidMove(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow);
 
 signals:
     void movePieceCommand(int fromCol, int fromRow, int toCol, int toRow);
