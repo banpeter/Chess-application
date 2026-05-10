@@ -41,11 +41,11 @@ using MoveFunction = Moves(*)(const Board&, const Piece&);
 class Piece {
 public:
     Position position;
-    const std::string name;
-    const std::string color;
+    std::string name;
+    std::string color;
     MoveFunction moves_generation;
     bool moved = false;
-    std::vector<Moves> moves_history;//each Moves represent all possible mvoes from one position
+    std::vector<Moves> moves_history;
 
     Piece(const std::string& name, const Position position, const std::string color);
     void print_position();
@@ -66,6 +66,8 @@ public:
     std::vector<Moves> moves;//???
     Player(const std::string& name, const std::string color);
     void init_pieces();
+    void remove_piece(const Position pos);
+    void apply_move(const std::string& piece_name, const Position pos, Player& player);
 };
 
 
@@ -87,6 +89,7 @@ public:
 
 
     void initialize() ;
+    void remove_piece(std::string color, const Position pos);
 };
 
 //Moves
@@ -104,6 +107,7 @@ bool check_postion(const Position p1, const Position p2);
 bool check_move(const Board& board, const Position current_pos);
 bool validate(Position current_position, Position next_position,Board board);
 std::vector<Position> intersection(const std::vector<Position>& moves1, const std::vector<Position> moves2);
+
 
 
 //minmax

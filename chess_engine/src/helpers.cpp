@@ -12,13 +12,13 @@ bool check_postion(const Position p1, const Position p2) {
 }
 
 //TODO also do overlap checking with the same color
-bool check_move(const Board& board, const Position current_pos) {
+bool check_move(const Board& board, const Position next_pos) {
 
     int overlap = -1;
 
     for (const auto& player : board.players) {
         for (const auto& pl : player.pieces) {
-            if (check_postion(current_pos,pl.position)) {
+            if (check_postion(next_pos,pl.position)) {
                 overlap++;
                 if (overlap == 1) {
                     return true;
@@ -33,8 +33,6 @@ bool check_move(const Board& board, const Position current_pos) {
 bool validate(Position current_position, Position next_position,Board board) {
 
     //TODO pass these as pointers
-    std::vector<Position> moves;
-    std::vector<Position> captures;
 
     bool inside = true;
     bool capture = false;
@@ -43,10 +41,10 @@ bool validate(Position current_position, Position next_position,Board board) {
     capture = check_move(board,current_position);//TODO
 
     if (inside && !capture) {
-        moves.push_back(next_position);
+
     }
     else if (inside && capture) {
-        captures.push_back(next_position);
+
 
     }
     else if (!inside) {
@@ -55,6 +53,14 @@ bool validate(Position current_position, Position next_position,Board board) {
 
 
     return false;
+}
+int color_to_index(const std::string& color) {
+    if (color == "white") {
+        return 0;
+    }
+    if (color == "black") {
+        return 1;
+    }
 }
 
 std::vector<Position> intersection(const std::vector<Position>& moves1, const std::vector<Position> moves2) {
@@ -116,10 +122,7 @@ bool check_mate(const Board& board, const Piece& king) {
         p.move(board);
     }
 
-
-
     return false;
 
-
-
 }
+

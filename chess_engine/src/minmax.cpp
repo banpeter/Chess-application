@@ -13,19 +13,19 @@ int value(std::string name) {
     if (name == "pawn") {
         return 2;
     }
-    else if (name == "knight") {
+    if (name == "knight") {
         return 3;
     }
-    else if (name == "bishop") {
+    if (name == "bishop") {
         return 4;
     }
-    else if (name == "rook") {
+    if (name == "rook") {
         return 5;
     }
-    else if (name == "queen") {
+    if (name == "queen") {
         return 10;
     }
-    else if (name == "king") {
+    if (name == "king") {
         return 7;
     }
 
@@ -97,8 +97,10 @@ int minimax(const Board& board,int depth, int alpha, int beta,bool is_maximizing
 }
 
 
+
+
 // Find the best move from root
-int best_move(const Board& root, int depth) {
+int best_move(const Board& root, int depth, std::string color) {
     int best_score = std::numeric_limits<int>::min();
     int best_idx   = -1;
     int alpha      = std::numeric_limits<int>::min();

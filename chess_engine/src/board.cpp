@@ -74,8 +74,47 @@ void Player::init_pieces() {
 }
 
 
+void Player::apply_move(const std::string &piece_name, const Position pos, Player& player) {
+
+    for (auto p : pieces) {
+        if (p.name == piece_name) {
+            for (auto valid_move : p.moves_history.back().moves) {
+                if (check_postion(pos,valid_move)) {
+                    p.set_position(pos);
+                    return;
+                }
+            }for (auto valid_move : p.moves_history.back().captures) {
+                if (check_postion(pos,valid_move)) {
+                    p.set_position(pos);
+                    player.remove_piece(valid_move);
+                    //remove teh piece at the given position
+                    return;
+                }
+            }
+
+        }
+    }
+}
 
 
+void Player::remove_piece(const Position pos) {
+    //auto& piece = pieces;
+
+    std::erase_if(pieces, [&](const auto& p) {
+        return check_postion(p.position, pos);
+    });
+}
+
+void Board::remove_piece(std::string color, const Position pos) {
+    int index = color == "white" ? 1 : 0;
+
+    auto& pieces = players[index].pieces;
+
+    std::erase_if(pieces, [&](const auto& p) {
+        return check_postion(p.position, pos);
+    });
+
+}
 
 Piece::Piece(const std::string& name, const Position position, const std::string color) : position(position), name(name), color(color) {
 }
