@@ -30,6 +30,11 @@ int main() {
 
     bool end = false;
 
+    //GENERATE moves
+    //aplly a chosen move
+    //check for checkmate
+    //repeatea
+
     while (!end) {
         for(auto p : board.players[0].pieces) {
             p.move(board);
