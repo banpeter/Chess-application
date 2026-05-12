@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(Chess-application VERSION 1.0 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_AUTOMOC ON)
@@ -29,6 +29,11 @@ set(PROJECT_SOURCES
     src/UI/ChessController.h
 
     resources.qrc
+
+    src/engine/board.cpp
+    src/engine/helpers.cpp
+    src/engine/minmax.cpp
+    src/engine/moves.cpp
 )
 
 add_executable(Chess-application ${PROJECT_SOURCES})
@@ -39,6 +44,7 @@ target_include_directories(Chess-application PRIVATE
     src/UI/home_screen
     src/UI/game_screen
     src/UI/pieces
+    src/engine
 )
 
 target_link_libraries(Chess-application PRIVATE Qt6::Widgets Qt6::Svg Qt6::SvgWidgets)
