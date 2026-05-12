@@ -38,10 +38,12 @@ void Player::init_pieces() {
     int y = 1;
     if (color == "white") {
         y = 1;
+
+        pieces.push_back(Piece("Rook", Position(0,0),color));
         pieces.push_back(Piece("King", Position(4,0),color));
         pieces.push_back(Piece("Queen", Position(5,0),color));
 
-        pieces.push_back(Piece("Rook", Position(0,0),color));
+
         pieces.push_back(Piece("Knight", Position(1,0),color));
         pieces.push_back(Piece("Bishop", Position(3,0),color));
 
@@ -116,7 +118,18 @@ void Board::remove_piece(std::string color, const Position pos) {
 
 }
 
-Piece::Piece(const std::string& name, const Position position, const std::string color) : position(position), name(name), color(color) {
+//Piece::Piece(const std::string& name, const Position position, const std::string color) : position(position), name(name), color(color) {}
+
+Piece::Piece(const std::string& name, const Position position, const std::string color)
+    : name(name), position(position), color(color)
+{
+    // Assign move function based on piece name
+    if      (name == "Rook")   moves_generation = rook_moves;
+    else if (name == "Knight") moves_generation = knight_moves;
+    else if (name == "Bishop") moves_generation = bishop_moves;
+    else if (name == "Queen")  moves_generation = queen_moves;
+    else if (name == "King")   moves_generation = king_moves;
+    else                       moves_generation = pawn_moves; // fallback for pawns
 }
 
 void Piece::print_position(){}

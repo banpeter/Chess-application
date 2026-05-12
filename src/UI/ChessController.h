@@ -3,12 +3,13 @@
 #include <QObject>
 #include <QString>
 #include <QDebug>
-
+#include "engine/engine.h"
 #include "ChessPiece.h"
 //#include "engine.h"
 
 class ChessController : public QObject {
     Q_OBJECT
+    Board board = Board();
 
 public:
     explicit ChessController(QObject *parent = nullptr);

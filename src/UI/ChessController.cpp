@@ -1,7 +1,11 @@
 #include "ChessController.h"
+#include "engine/engine.h"
+#include "iostream"
 
 ChessController::ChessController(QObject *parent) : QObject(parent) {
     // backendGame = new Core::Game();
+
+    board.initialize();
 }
 
 bool ChessController::isValidMove(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow) {
@@ -9,6 +13,15 @@ bool ChessController::isValidMove(ChessPiece* piece, int fromCol, int fromRow, i
     if (fromCol == toCol && fromRow == toRow) {
         return false;
     }
+    std::cout << "Generating moves" << std::endl;
+    for(auto& p : board.players[0].pieces) {
+        std::cout << "Generate move" << std::endl;
+        p.move(board);
+    }
+    std::cout << "Moves generated" << std::endl;
+    /*for(auto p : board.players[1].pieces) {
+        p.move(board);
+    }*/
 
     // bool isValid = backendGame->validate_move(fromSquare.toStdString(), toSquare.toStdString());
     bool isValid = true;
