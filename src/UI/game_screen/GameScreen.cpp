@@ -118,8 +118,9 @@ void GameScreen::setupPiece(const QString& svgPath, int col, int row, PieceColor
 void GameScreen::onMoveRequested(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow) {
     const int SQUARE_SIZE = 60;
     
-    if (controller->isValidMove(piece, fromCol, fromRow, toCol, toRow)) {
+    if (controller->isValidMove(fromCol, fromRow, toCol, toRow)) {
         executeMove(fromCol, fromRow, toCol, toRow);
+        controller->triggerEngineMove();
         
     } else {
         piece->setPos(fromCol * 60, fromRow * 60);

@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QString>
 #include <QDebug>
+#include <QTimer>
 
 #include "ChessPiece.h"
 //#include "engine.h"
@@ -13,7 +14,9 @@ class ChessController : public QObject {
 public:
     explicit ChessController(QObject *parent = nullptr);
 
-    bool isValidMove(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow);
+    bool isValidMove(int fromCol, int fromRow, int toCol, int toRow);
+
+    void triggerEngineMove();
 
 signals:
     void movePieceCommand(int fromCol, int fromRow, int toCol, int toRow);
