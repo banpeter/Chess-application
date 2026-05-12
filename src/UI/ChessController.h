@@ -5,6 +5,7 @@
 #include <QDebug>
 
 #include "ChessPiece.h"
+//#include "engine.h"
 
 class ChessController : public QObject {
     Q_OBJECT
@@ -16,8 +17,8 @@ public:
 
 signals:
     void movePieceCommand(int fromCol, int fromRow, int toCol, int toRow);
-    void removePieceCommand(const QString& square);
+    void gameOverCommand(const QString& message);
 
 private:
-    // Core::Game* backendGame;
+    // Board engineBoard;
 };

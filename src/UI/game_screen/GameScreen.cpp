@@ -32,13 +32,6 @@ GameScreen::GameScreen(QWidget *parent) : QWidget(parent) {
     mainLayout->addWidget(boardView, 0, Qt::AlignCenter); 
     
     //pieces
-    auto addPiece = [this](const QString& svgPath, int col, int row) {
-        ChessPiece* piece = new ChessPiece(svgPath);
-        piece->setScale(0.5);
-        piece->setPos(col * 60, row * 60);
-        boardScene->addItem(piece);
-    };
-
     //black
     setupPiece(":/resources/pieces/rook-b.svg",   0, 0, PieceColor::Black, PieceType::Rook);
     setupPiece(":/resources/pieces/knight-b.svg", 1, 0, PieceColor::Black, PieceType::Knight);
@@ -81,6 +74,7 @@ GameScreen::GameScreen(QWidget *parent) : QWidget(parent) {
 
     // connections
     connect(backButton, &QPushButton::clicked, this, &GameScreen::backToMenuRequested);
+    connect(controller, &ChessController::movePieceCommand, this, &GameScreen::onEngineMoved);
 }
 
 void GameScreen::drawBoard() {
@@ -110,39 +104,33 @@ void GameScreen::setupPiece(const QString& svgPath, int col, int row, PieceColor
     ChessPiece* piece = new ChessPiece(svgPath);
     piece->setScale(0.5); 
     piece->setPos(col * 60, row * 60); 
-
+    
     piece->setPieceColor(color);
     piece->setPieceType(type);
     piece->setGridPosition(col, row);
-
-    connect(piece, &ChessPiece::moveRequested, this, &GameScreen::handleMoveRequest);
+    
+    connect(piece, &ChessPiece::moveRequested, this, &GameScreen::onMoveRequested);
     
     boardScene->addItem(piece);
     pieceRegistry[col][row] = piece;
 }
 
-void GameScreen::handleMoveRequest(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow) {
-
+void GameScreen::onMoveRequested(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow) {
+    const int SQUARE_SIZE = 60;
+    
     if (controller->isValidMove(piece, fromCol, fromRow, toCol, toRow)) {
-        piece->setPos(toCol * 60, toRow * 60);
-        piece->setGridPosition(toCol, toRow);
-        pieceRegistry[toCol][toRow] = piece;
-        pieceRegistry[fromCol][fromRow] = nullptr;
-
-        if (piece->getPieceType() == PieceType::Pawn) {
-            if (piece->getPieceColor() == PieceColor::White && toRow == 0) {
-                handlePawnPromotion(toCol, toRow, piece->getPieceColor());
-            } else if (piece->getPieceColor() == PieceColor::Black && toRow == 7) {
-                handlePawnPromotion(toCol, toRow, piece->getPieceColor());
-            }
-        }
-
+        executeMove(fromCol, fromRow, toCol, toRow);
+        
     } else {
         piece->setPos(fromCol * 60, fromRow * 60);
     }
 }
 
-void GameScreen::handlePawnPromotion(int col, int row, PieceColor color) {
+void GameScreen::onEngineMoved(int fromCol, int fromRow, int toCol, int toRow) {
+    executeMove(fromCol, fromRow, toCol, toRow);
+}
+
+void GameScreen::promotePawn(int col, int row, PieceColor color) {
     QMessageBox msgBox(this);
     msgBox.setWindowTitle("Pawn promtoion");
     msgBox.setText("Choose a piece to promote your pawn to:");
@@ -181,4 +169,31 @@ void GameScreen::handlePawnPromotion(int col, int row, PieceColor color) {
 
     // create the new piece and place it on the board
     setupPiece(svgPath, col, row, color, selectedType); 
+}
+
+void GameScreen::executeMove(int fromCol, int fromRow, int toCol, int toRow) {
+    ChessPiece* pieceToMove = pieceRegistry[fromCol][fromRow];
+    if (!pieceToMove) return;
+
+    //handle capture
+    if (pieceRegistry[toCol][toRow] != nullptr) {
+        boardScene->removeItem(pieceRegistry[toCol][toRow]);
+        delete pieceRegistry[toCol][toRow];
+    }
+
+    //move piece
+    pieceToMove->setPos(toCol * 60, toRow * 60);
+    pieceToMove->setGridPosition(toCol, toRow);
+    
+    pieceRegistry[toCol][toRow] = pieceToMove;
+    pieceRegistry[fromCol][fromRow] = nullptr;
+
+    // chechk for pawn promotion
+    if (pieceToMove->getPieceType() == PieceType::Pawn) {
+        if (pieceToMove->getPieceColor() == PieceColor::White && toRow == 0) {
+            promotePawn(toCol, toRow, PieceColor::White);
+        } else if (pieceToMove->getPieceColor() == PieceColor::Black && toRow == 7) {
+            promotePawn(toCol, toRow, PieceColor::Black);
+        }
+    }
 }

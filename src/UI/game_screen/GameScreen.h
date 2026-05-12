@@ -6,7 +6,6 @@
 #include <QPushButton>
 #include <QGraphicsSvgItem>
 #include <QMessageBox>
-#include <QPushButton>
 
 #include "ChessPiece.h"
 #include "ChessController.h"
@@ -20,8 +19,11 @@ public:
 signals:
     void backToMenuRequested(); 
 
+public slots:
+    void onEngineMoved(int fromCol, int fromRow, int toCol, int toRow);
+
 private slots:
-    void handleMoveRequest(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow);
+    void onMoveRequested(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow);
 
 private:
     QPushButton *backButton;
@@ -34,8 +36,8 @@ private:
 
     void drawBoard();
     void setupPiece(const QString& svgPath, int col, int row, PieceColor color, PieceType type);
-
     void showGameOver(const QString& message);
 
-    void handlePawnPromotion(int toCol, int toRow, PieceColor color);
+    void promotePawn(int toCol, int toRow, PieceColor color);
+    void executeMove(int fromCol, int fromRow, int toCol, int toRow);
 };
