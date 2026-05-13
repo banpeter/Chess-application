@@ -15,16 +15,17 @@ public:
     explicit ChessController(QObject *parent = nullptr);
 
     bool isValidMove(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow);
+    bool isCheckmate(PieceColor color);
 
     void triggerEngineMove();
     void promotePawnToEngine(int col, int row, PieceColor color, PieceType selectedType);
 
     
-    signals:
+signals:
     void movePieceCommand(int fromCol, int fromRow, int toCol, int toRow, QString promotedTo = "");
     void gameOverCommand(const QString& message);
     
-    private:
+private:
     QString pieceTypeToString(PieceType type);
     QString pieceColorToString(PieceColor color);
 };

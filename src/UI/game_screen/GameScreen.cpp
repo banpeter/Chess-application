@@ -5,6 +5,7 @@
 #include <QGraphicsRectItem>
 #include <QBrush>
 #include <QColor>
+#include <QMessageBox>
 
 GameScreen::GameScreen(QWidget *parent) : QWidget(parent) {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
@@ -75,6 +76,7 @@ GameScreen::GameScreen(QWidget *parent) : QWidget(parent) {
     // connections
     connect(backButton, &QPushButton::clicked, this, &GameScreen::backToMenuRequested);
     connect(controller, &ChessController::movePieceCommand, this, &GameScreen::onEngineMoved);
+    connect(controller, &ChessController::gameOverCommand, this, &GameScreen::onGameOver);
 }
 
 void GameScreen::drawBoard() {
@@ -109,7 +111,7 @@ void GameScreen::setupPiece(const QString& svgPath, int col, int row, PieceColor
     piece->setPieceType(type);
     piece->setGridPosition(col, row);
     
-    connect(piece, &ChessPiece::moveRequested, this, &GameScreen::onMoveRequested);
+    connect(piece, &ChessPiece::userMoveRequested, this, &GameScreen::onUserMoveRequested);
     
     boardScene->addItem(piece);
     pieceRegistry[col][row] = piece;
@@ -118,11 +120,15 @@ void GameScreen::setupPiece(const QString& svgPath, int col, int row, PieceColor
 
 
 
-void GameScreen::onMoveRequested(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow) {
+void GameScreen::onUserMoveRequested(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow) {
     
     if ((piece->getPieceColor() == *currentTurn && controller->isValidMove(piece, fromCol, fromRow, toCol, toRow)) ) {
         executeMove(fromCol, fromRow, toCol, toRow);
-        controller->triggerEngineMove();
+        if (controller->isCheckmate(PieceColor::Black)) { // check for checkmate after the user's move
+            emit controller->gameOverCommand("You win! Checkmate!");
+        } else {
+            controller->triggerEngineMove();
+        }
         
     } else {
         piece->setPos(fromCol * 60, fromRow * 60);
@@ -238,9 +244,9 @@ void GameScreen::executeMove(int fromCol, int fromRow, int toCol, int toRow) {
     if (pieceToMove->getPieceType() == PieceType::Pawn) {
         if (pieceToMove->getPieceColor() == PieceColor::White && toRow == 0) {
             promotePawn(toCol, toRow, PieceColor::White);
-        } else if (pieceToMove->getPieceColor() == PieceColor::Black && toRow == 7) {
+        }/* else if (pieceToMove->getPieceColor() == PieceColor::Black && toRow == 7) {
             promotePawn(toCol, toRow, PieceColor::Black);
-        }
+        }*/
     }
 
     *currentTurn = (*currentTurn == PieceColor::White) ? PieceColor::Black : PieceColor::White;

@@ -19,5 +19,5 @@ void ChessPiece::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         return;
     }
 
-    emit moveRequested(this, currentCol, currentRow, toCol, toRow);
+    emit userMoveRequested(this, currentCol, currentRow, toCol, toRow);
 }

@@ -21,9 +21,10 @@ signals:
 
 public slots:
     void onEngineMoved(int fromCol, int fromRow, int toCol, int toRow, QString promotedTo);
+    void onGameOver(const QString& message);
 
 private slots:
-    void onMoveRequested(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow);
+    void onUserMoveRequested(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow);
 
 private:
     QPushButton *backButton;
@@ -38,7 +39,6 @@ private:
 
     void drawBoard();
     void setupPiece(const QString& svgPath, int col, int row, PieceColor color, PieceType type);
-    void showGameOver(const QString& message);
 
     void promotePawn(int toCol, int toRow, PieceColor color);
     void executeMove(int fromCol, int fromRow, int toCol, int toRow);

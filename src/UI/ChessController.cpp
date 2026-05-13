@@ -4,7 +4,7 @@
 
 ChessController::ChessController(QObject *parent) : QObject(parent) {
     // backendGame = new Core::Game();
-
+    
     board.initialize();
 }
 
@@ -21,28 +21,44 @@ bool ChessController::isValidMove(ChessPiece* piece, int fromCol, int fromRow, i
     std::cout << "Moves generated" << std::endl;
     /*for(auto p : board.players[1].pieces) {
         p.move(board);
-    }*/
-
-    // bool isValid = backendGame->validate_move(fromSquare.toStdString(), toSquare.toStdString());
-    bool isValid = true;
-
-    if (isValid) {
-        qDebug() << "[Controller] valid move: " << fromCol << fromRow << "->" << toCol << toRow;
+        }*/
+       
+       // bool isValid = backendGame->validate_move(fromSquare.toStdString(), toSquare.toStdString());
+       bool isValid = true;
+       
+       if (isValid) {
+           qDebug() << "[Controller] valid move: " << fromCol << fromRow << "->" << toCol << toRow;
+           
+        } else {
+            qDebug() << "[Controller] invalid move: " << fromCol << fromRow << "->" << toCol << toRow;
+            return false;
+        }
         
+        return isValid;
+    }
+    
+int counter = 0;
+void ChessController::triggerEngineMove() {
+    // Dummy engine move
+
+
+    if (counter == 0) {
+        emit movePieceCommand(0, 1, 0, 3);
+        counter++;
+    } else if (counter == 1) {
+        emit movePieceCommand(4, 1, 4, 3);
+        counter++;
     } else {
-        qDebug() << "[Controller] invalid move: " << fromCol << fromRow << "->" << toCol << toRow;
-        return false;
+        emit movePieceCommand(1, 0, 2, 2);
     }
 
-    return isValid;
 }
 
-void ChessController::triggerEngineMove() {
 
-        // INPUT for engine moves, this method is called after the user makes a move, so the engine can respond with its move
-        //emit movePieceCommand(fromCol, fromRow, toCol, toRow);
+bool ChessController::isCheckmate(PieceColor color) {
+    // dummy checkmate detection
+    return false;
 }
-
 
 void ChessController::promotePawnToEngine(int col, int row, PieceColor color, PieceType selectedType) {
     

@@ -39,7 +39,7 @@ public:
     int getRow() const { return currentRow; }
 
 signals:
-    void moveRequested(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow);
+    void userMoveRequested(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow);
 
 protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
