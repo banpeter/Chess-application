@@ -129,10 +129,49 @@ void GameScreen::onMoveRequested(ChessPiece* piece, int fromCol, int fromRow, in
     }
 }
 
-void GameScreen::onEngineMoved(int fromCol, int fromRow, int toCol, int toRow) {
+void GameScreen::onEngineMoved(int fromCol, int fromRow, int toCol, int toRow, QString promotedTo) {
     executeMove(fromCol, fromRow, toCol, toRow);
+    
+    // handle pawn promotion if needed
+    if (!promotedTo.isEmpty()) {
+        
+        // delete the pawn that's being promoted
+        if (pieceRegistry[toCol][toRow]) {
+            boardScene->removeItem(pieceRegistry[toCol][toRow]);
+            delete pieceRegistry[toCol][toRow];
+            pieceRegistry[toCol][toRow] = nullptr;
+        }
+        
+        QString svgPath;
+        PieceType selectedType;
+        
+        if (promotedTo == "queen") {
+            svgPath = ":/resources/pieces/queen-b.svg";
+            selectedType = PieceType::Queen;
+        } else if (promotedTo == "rook") {
+            svgPath = ":/resources/pieces/rook-b.svg";
+            selectedType = PieceType::Rook;
+        } else if (promotedTo == "bishop") {
+            svgPath = ":/resources/pieces/bishop-b.svg";
+            selectedType = PieceType::Bishop;
+        } else {
+            svgPath = ":/resources/pieces/knight-b.svg";
+            selectedType = PieceType::Knight;
+        }
+        
+        // setup the new piece on the board
+        setupPiece(svgPath, toCol, toRow, PieceColor::Black, selectedType);
+
+        // check for checkmate after the promotion
+        if (controller->isCheckmate(PieceColor::White)) {
+            emit controller->gameOverCommand("Checkmate! You lose!");
+        }
+    }
 }
 
+void GameScreen::onGameOver(const QString &message) {
+    QMessageBox::information(this, "Game over", message);
+}
 
 
 

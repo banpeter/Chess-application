@@ -20,7 +20,7 @@ signals:
     void backToMenuRequested(); 
 
 public slots:
-    void onEngineMoved(int fromCol, int fromRow, int toCol, int toRow);
+    void onEngineMoved(int fromCol, int fromRow, int toCol, int toRow, QString promotedTo);
 
 private slots:
     void onMoveRequested(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow);
