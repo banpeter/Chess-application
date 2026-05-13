@@ -45,6 +45,9 @@ Moves rook_moves(const Board& board, const Piece& chosen_piece) {
                 captures_mask.push_back(0);
                 moves_pos.push_back(next_position);
             }
+            else if (inside && occupied && !capture) {
+                generate = false;
+            }
             else if (inside && occupied && capture) {
                 captures.push_back(next_position);
                 captures_mask.push_back(1);
@@ -99,17 +102,21 @@ Moves bishop_moves(const Board& board, const Piece& chosen_piece) {
                 next_position.x++;
                 next_position.y--;
             }
-            next_position.x++;
-            next_position.y++;
+            //next_position.x++;
+            //next_position.y++;
             //check inside
             inside = next_position.inside();
-            occupied = check_occupied(board,chosen_piece.position);
-            capture = check_move(board,chosen_piece.position,chosen_piece.color);
+            occupied = check_occupied(board,next_position);
+            capture = check_move(board,next_position,chosen_piece.color);
 
-            if (inside && !capture) {
+            if (inside && !occupied && !capture) {
+                captures_mask.push_back(0);
                 moves_pos.push_back(next_position);
             }
-            else if (inside && capture) {
+            else if (inside && occupied && !capture) {
+                generate = false;
+            }
+            else if (inside && occupied && capture) {
                 captures.push_back(next_position);
                 captures_mask.push_back(1);
                 generate = false;
@@ -122,6 +129,7 @@ Moves bishop_moves(const Board& board, const Piece& chosen_piece) {
         }
         moves_sections.push_back(moves_section);
         next_position = chosen_piece.position;
+        generate = true;
     }
 
 
