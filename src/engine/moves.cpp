@@ -316,13 +316,16 @@ Moves king_moves(const Board& board, const Piece& chosen_piece) {
     const std::vector<std::vector<int>> move_king = {{0,1},  {0,-1},  {-1,0}, {1,0},  {1,1},  {1,-1},  {-1,1}, {-1,-1}};
 
     const Player *p = nullptr;
+    const Player *p2 = nullptr;
 
     //TODO if order change in initialization this brokes
     if (chosen_piece.color == "white") {
         p = &board.players[0];
+        p2 = &board.players[1];
     }
     else {
         p = &board.players[1];
+        p2 = &board.players[0];
     }
 
     bool free_tile = true;
@@ -335,33 +338,38 @@ Moves king_moves(const Board& board, const Piece& chosen_piece) {
         next_position.x += i[0];
         next_position.y += i[1];
         inside = next_position.inside();
-        capture = check_move(board,chosen_piece.position,chosen_piece.color);
+        occupied = check_occupied(board,next_position);
+        capture = check_move(board,next_position,chosen_piece.color);
 
 
         //first do not move where other are
         bool attacked = false;
-        //free tile
-        if (inside && !capture) {
-            free_tile_c++;
-            moves_pos.push_back(next_position);
-            for (const auto & piece : p->pieces) {
-                for (const auto & move : piece.moves_history) {
-                    for (const auto & k : move.moves) {
-                        if (k.x == next_position.x && k.y == next_position.y) {
-                            attacked = true;
-                            break;
-                        }
+        for (const auto & piece : p2->pieces) {
+            for (const auto & move : piece.moves_history) {
+                for (const auto & k : move.moves) {
+                    if (k.x == next_position.x && k.y == next_position.y) {
+                        attacked = true;
+                        break;
                     }
-
                 }
-            }
-            if (!attacked) {
-                moves_pos.push_back(next_position);
-            }
-            if (!attacked && capture) {
-                captures.push_back(next_position);
+
             }
         }
+        if (attacked) {
+            std::cout << "attacked" << std::endl;
+        }
+        //free tile
+        if (inside && !occupied && !capture && !attacked) {
+            free_tile_c++;
+            moves_pos.push_back(next_position);
+        }
+
+
+
+        else if (inside && occupied && !attacked && capture) {
+            captures.push_back(next_position);
+        }
+
         next_position = chosen_piece.position;
     }
     if (free_tile_c == count_attacked) {
