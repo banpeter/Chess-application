@@ -177,7 +177,7 @@ void GameScreen::executeMove(int fromCol, int fromRow, int toCol, int toRow) {
 
     //handle capture
     if (pieceRegistry[toCol][toRow] != nullptr) {
-        boardScene->removeItem(pieceRegistry[toCol][toRow]);
+        //boardScene->removeItem(pieceRegistry[toCol][toRow]);
         //delete pieceRegistry[toCol][toRow];
     }
 

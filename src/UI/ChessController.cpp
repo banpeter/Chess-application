@@ -24,7 +24,7 @@ bool ChessController::isValidMove(ChessPiece* piece, int fromCol, int fromRow, i
     std::cout << "Moves generated" << std::endl;
     //check valid move
     //TODO create Position from the int values
-    Position current_position = Position(fromCol, toCol);
+    Position current_position = Position(fromCol, fromRow);
     Position next_position = Position(toCol, toRow);
     //bool isValid = validate_move( board,  current_position,  next_position, color, piece_name) ;
     //bool isValid = true;
@@ -51,7 +51,7 @@ bool ChessController::isValidMove(ChessPiece* piece, int fromCol, int fromRow, i
     }
 
     //validates. If valid apply, otherwise do not do anything
-    bool isValid = board.players[0].apply_move( pieceName,  next_position, board.players[1]);
+    bool isValid = board.players[0].apply_move( pieceName, current_position, next_position, board.players[1]);
     //TODO test
     //TODO MinMAX
 

@@ -12,25 +12,42 @@ bool check_postion(const Position p1, const Position p2) {
 }
 
 //TODO also do overlap checking with the same color
-bool check_move(const Board& board, const Position next_pos) {
-
+bool check_move(const Board& board, const Position next_pos, std::string color) {
+//saját magára hiszi, hogy capture
+    int index = color == "white" ? 1 : 0;
     int overlap = 0;
 
-    for (const auto& player : board.players) {
-        for (const auto& pl : player.pieces) {
-            if (check_postion(next_pos,pl.position)) {
-                overlap++;
-                if (overlap == 1) {
-                    return true;
-                }
+
+    for (const auto& pl : board.players[index].pieces) {
+        if (check_postion(next_pos,pl.position)) {
+            overlap++;
+            if (overlap == 1) {
+                return true;
             }
         }
     }
+
     return false;
 }
 
+bool check_occupied(const Board& board, const Position next_pos) {
+
+        int overlap = 0;
+
+        for (const auto& player : board.players) {
+            for (const auto& pl : player.pieces) {
+                if (check_postion(next_pos,pl.position)) {
+                    overlap++;
+                    if (overlap == 1) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
 //review, during move generation these constraints are already examined
-bool validate_on_board(Position current_position, Position next_position,Board board) {
+bool validate_on_board(Position current_position, Position next_position,Board board, std::string color) {
 
     //TODO pass these as pointers
 
@@ -38,7 +55,8 @@ bool validate_on_board(Position current_position, Position next_position,Board b
     bool capture = false;
 
     inside = next_position.inside();
-    capture = check_move(board,current_position);//TODO
+    capture = check_move(board,current_position,color);//TODO
+
 
     if (inside && !capture) {
 
@@ -54,7 +72,7 @@ bool validate_on_board(Position current_position, Position next_position,Board b
 }
 
 bool validate_move(const Board& board, Position current_position, Position next_position, std::string color,std::string piece_name) {
-    bool on_board = validate_on_board( current_position,  next_position, board);
+    bool on_board = validate_on_board( current_position,  next_position, board,color);
     int index = color == "white" ? 1 : 0;
     for (const auto& piece : board.players[index].pieces) {
         if (piece.name == piece_name) {

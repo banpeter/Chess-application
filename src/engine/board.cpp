@@ -59,7 +59,7 @@ void Player::init_pieces() {
         }
     }
     else if (color == "black") {
-        y = 7;
+        y = 6;
         pieces.push_back(Piece("King", Position(4,7),color));
         pieces.push_back(Piece("Queen", Position(5,7),color));
 
@@ -79,10 +79,10 @@ void Player::init_pieces() {
 }
 
 
-bool Player::apply_move(const std::string &piece_name, const Position next_pos, Player& other_player) {
+bool Player::apply_move(const std::string &piece_name, const Position curr_pos, const Position next_pos, Player& other_player) {
 
     for (auto &p : pieces) {
-        if (p.name == piece_name) {
+        if (p.name == piece_name && check_postion(p.position,curr_pos)) {//TODO and position is hte same
             for (auto valid_move : p.moves_history.back().moves) {
                 if (check_postion(next_pos,valid_move)) {
                     p.set_position(next_pos);

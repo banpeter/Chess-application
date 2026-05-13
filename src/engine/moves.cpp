@@ -15,6 +15,7 @@ Moves rook_moves(const Board& board, const Piece& chosen_piece) {
 
     Position next_position = chosen_piece.position;
     bool inside = true;
+    bool occupied = true;
     bool capture = false;
 
     bool generate = true;
@@ -37,7 +38,8 @@ Moves rook_moves(const Board& board, const Piece& chosen_piece) {
 
             //check inside
             inside = next_position.inside();
-            capture = check_move(board,chosen_piece.position);
+            occupied = check_occupied(board,chosen_piece.position);
+            capture = check_move(board,chosen_piece.position,chosen_piece.color);
 
             if (inside && !capture) {
                 moves_pos.push_back(next_position);
@@ -72,6 +74,7 @@ Moves bishop_moves(const Board& board, const Piece& chosen_piece) {
 
     Position next_position = chosen_piece.position;
     bool inside = true;
+    bool occupied = true;
     bool capture = false;
 
     bool generate = true;
@@ -99,7 +102,8 @@ Moves bishop_moves(const Board& board, const Piece& chosen_piece) {
             next_position.y++;
             //check inside
             inside = next_position.inside();
-            capture = check_move(board,chosen_piece.position);
+            occupied = check_occupied(board,chosen_piece.position);
+            capture = check_move(board,chosen_piece.position,chosen_piece.color);
 
             if (inside && !capture) {
                 moves_pos.push_back(next_position);
@@ -134,6 +138,7 @@ Moves knight_moves(const Board& board, const Piece& chosen_piece) {
 
     Position next_position = chosen_piece.position;
     bool inside = true;
+    bool occupied = true;
     bool capture = false;
 
     const std::vector<std::vector<int>> move_knight = {{2,1},  {2,-1},  {-2,1}, {-2,-1}, {1, 2}, {-1,2},{-1, -2}, {1,-2}  };
@@ -143,7 +148,8 @@ Moves knight_moves(const Board& board, const Piece& chosen_piece) {
         next_position.x += move[0];
         next_position.y += move[1];
         inside = next_position.inside();
-        capture = check_move(board,next_position);
+        occupied = check_occupied(board,chosen_piece.position);
+        capture = check_move(board,chosen_piece.position,chosen_piece.color);
         if (inside && !capture) {
             captures_mask.push_back(0);
             moves_pos.push_back(next_position);
@@ -171,6 +177,7 @@ Moves pawn_moves(const Board& board, const Piece& chosen_piece) {
 
     Position next_position = chosen_piece.position;
     bool inside = true;
+    bool occupied = true;
     bool capture = false;
     int first_move = 2;
 
@@ -190,9 +197,11 @@ Moves pawn_moves(const Board& board, const Piece& chosen_piece) {
         next_position.x += 0;
         next_position.y += first_move;
         inside = next_position.inside();
-        capture = check_move(board,next_position);
-        if (inside && !capture) {
+        occupied = check_occupied(board,chosen_piece.position);
+        capture = check_move(board,chosen_piece.position,chosen_piece.color);
+        if (inside && !occupied && !capture) {
             captures_mask.push_back(0);
+
             moves_pos.push_back(next_position);
         }
         moves_section.push_back(next_position);
@@ -207,16 +216,18 @@ Moves pawn_moves(const Board& board, const Piece& chosen_piece) {
 
         next_position.x += (*move_pawn)[i][0];
         next_position.y += (*move_pawn)[i][1];
+
         inside = next_position.inside();
-        capture = check_move(board,next_position);
+        occupied = check_occupied(board,chosen_piece.position);
+        capture = check_move(board,chosen_piece.position,chosen_piece.color);
 
 
 
-        if (inside && !capture && i == 0) {
+        if (inside && !occupied && !capture && i == 0) {
             captures_mask.push_back(0);
             moves_pos.push_back(next_position);
         }
-        else if (inside && capture && i != 0) {
+        else if (inside && !occupied && capture && i != 0) {
             captures_mask.push_back(1);
             captures.push_back(next_position);
         }
@@ -290,6 +301,7 @@ Moves king_moves(const Board& board, const Piece& chosen_piece) {
     std::vector<std::vector<Position>> moves_sections;
 
     bool inside = true;
+    bool occupied = true;
     bool capture = false;
 
     const std::vector<std::vector<int>> move_king = {{0,1},  {0,-1},  {-1,0}, {1,0},  {1,1},  {1,-1},  {-1,1}, {-1,-1}};
@@ -314,7 +326,7 @@ Moves king_moves(const Board& board, const Piece& chosen_piece) {
         next_position.x += i[0];
         next_position.y += i[1];
         inside = next_position.inside();
-        capture = check_move(board,chosen_piece.position);
+        capture = check_move(board,chosen_piece.position,chosen_piece.color);
 
 
         //first do not move where other are
