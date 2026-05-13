@@ -39,17 +39,19 @@ void Player::init_pieces() {
     if (color == "white") {
         y = 1;
 
+
+
+
         pieces.push_back(Piece("Rook", Position(0,0),color));
-        pieces.push_back(Piece("King", Position(4,0),color));
-        pieces.push_back(Piece("Queen", Position(5,0),color));
-
-
         pieces.push_back(Piece("Knight", Position(1,0),color));
-        pieces.push_back(Piece("Bishop", Position(3,0),color));
+        pieces.push_back(Piece("Bishop", Position(2,0),color));
+        pieces.push_back(Piece("King", Position(3,0),color));
+        pieces.push_back(Piece("Queen", Position(4,0),color));
 
-        pieces.push_back(Piece("Rook", Position(8,0),color));
-        pieces.push_back(Piece("Knight", Position(7,0),color));
-        pieces.push_back(Piece("Bishop", Position(6,0),color));
+
+        pieces.push_back(Piece("Bishop", Position(5,0),color));
+        pieces.push_back(Piece("Knight", Position(6,0),color));
+        pieces.push_back(Piece("Rook", Position(7,0),color));
 
         for (int i = 0; i < 8; i++) {
             //pieces_pawns.push_back(Piece(color, Position(i,y),color));
