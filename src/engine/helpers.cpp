@@ -39,12 +39,12 @@ bool check_occupied(const Board& board, const Position next_pos) {
                 if (check_postion(next_pos,pl.position)) {
                     overlap++;
                     if (overlap == 1) {
-                        return false;
+                        return true;
                     }
                 }
             }
         }
-        return true;
+        return false;
     }
 //review, during move generation these constraints are already examined
 bool validate_on_board(Position current_position, Position next_position,Board board, std::string color) {

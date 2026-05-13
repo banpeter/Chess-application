@@ -72,7 +72,8 @@ void Player::init_pieces() {
         pieces.push_back(Piece("Bishop", Position(6,7),color));
 
         for (int i = 0; i < 8; i++) {
-            pieces_pawns.push_back(Piece("Pawn", Position(i,y),color));
+            //pieces_pawns.push_back(Piece("Pawn", Position(i,y),color));
+            pieces.push_back(Piece("Pawn", Position(i,y),color));
         }
     }
     std::cout << "Adding pawns" << std::endl;

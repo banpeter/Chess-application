@@ -24,10 +24,10 @@ Moves rook_moves(const Board& board, const Piece& chosen_piece) {
         std::vector<Position> moves_section;
         while (generate) {
             if (i==0) {
-                next_position.x++;
+                next_position.x--;
             }
             else if (i==1) {
-                next_position.x--;
+                next_position.x++;
             }
             else if (i==2) {
                 next_position.y++;
@@ -38,13 +38,14 @@ Moves rook_moves(const Board& board, const Piece& chosen_piece) {
 
             //check inside
             inside = next_position.inside();
-            occupied = check_occupied(board,chosen_piece.position);
-            capture = check_move(board,chosen_piece.position,chosen_piece.color);
+            occupied = check_occupied(board,next_position);
+            capture = check_move(board,next_position,chosen_piece.color);
 
-            if (inside && !capture) {
+            if (inside && !occupied && !capture) {
+                captures_mask.push_back(0);
                 moves_pos.push_back(next_position);
             }
-            else if (inside && capture) {
+            else if (inside && occupied && capture) {
                 captures.push_back(next_position);
                 captures_mask.push_back(1);
                 generate = false;
@@ -54,10 +55,10 @@ Moves rook_moves(const Board& board, const Piece& chosen_piece) {
                 generate = false;
             }
             moves_section.push_back(next_position);//TODO wrong place
-
         }
         moves_sections.push_back(moves_section);
         next_position = chosen_piece.position;
+        generate = true;
 
     }
 
@@ -197,7 +198,7 @@ Moves pawn_moves(const Board& board, const Piece& chosen_piece) {
         next_position.x += 0;
         next_position.y += first_move;
         inside = next_position.inside();
-        occupied = check_occupied(board,chosen_piece.position);
+        occupied = check_occupied(board,next_position);
         capture = check_move(board,chosen_piece.position,chosen_piece.color);
         if (inside && !occupied && !capture) {
             captures_mask.push_back(0);
@@ -218,8 +219,8 @@ Moves pawn_moves(const Board& board, const Piece& chosen_piece) {
         next_position.y += (*move_pawn)[i][1];
 
         inside = next_position.inside();
-        occupied = check_occupied(board,chosen_piece.position);
-        capture = check_move(board,chosen_piece.position,chosen_piece.color);
+        occupied = check_occupied(board,next_position);
+        capture = check_move(board,next_position,chosen_piece.color);
 
 
 
@@ -227,7 +228,7 @@ Moves pawn_moves(const Board& board, const Piece& chosen_piece) {
             captures_mask.push_back(0);
             moves_pos.push_back(next_position);
         }
-        else if (inside && !occupied && capture && i != 0) {
+        else if (inside && occupied && capture && i != 0) {
             captures_mask.push_back(1);
             captures.push_back(next_position);
         }
