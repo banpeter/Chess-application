@@ -364,8 +364,6 @@ Moves king_moves(const Board& board, const Piece& chosen_piece) {
             moves_pos.push_back(next_position);
         }
 
-
-
         else if (inside && occupied && !attacked && capture) {
             captures.push_back(next_position);
         }

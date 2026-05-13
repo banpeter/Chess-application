@@ -120,6 +120,32 @@ std::vector<Position> intersection(const std::vector<Position>& moves1, const st
 }
 //TODO piece can not move if attacks could happen -> each ,moves has to go until boundary??
 //TODO add resign
+
+bool check(const Board& board, const Piece& king) {
+
+    const Player *p = nullptr;
+    const Player *p2 = nullptr;
+
+    if (king.color == "white") {
+        p = &board.players[0];
+        p2 = &board.players[1];
+    }
+    else {
+        p = &board.players[1];
+        p2 = &board.players[0];
+    }
+    for (const auto & piece : p2->pieces) {
+        for (const auto & move : piece.moves_history) {
+            for (const auto & k : move.moves) {
+                if (k.x == king.position.x && k.y == king.position.y) {
+                    return true;
+                }
+            }
+
+        }
+    }
+}
+
 bool check_mate(const Board& board, const Piece& king) {
 
     std::vector<std::vector<Position>> moves_sections;
