@@ -341,10 +341,30 @@ Moves king_moves(const Board& board, const Piece& chosen_piece) {
         occupied = check_occupied(board,next_position);
         capture = check_move(board,next_position,chosen_piece.color);
 
-
+        const std::vector<std::vector<int>> move_pawn_white = {{0,1},  {1,1},  {-1,1} };
+        const std::vector<std::vector<int>> move_pawn_black = {{0,-1},  {1,-1},  {-1,-1}};
+        const std::vector<std::vector<int>> *move_pawn = nullptr;
         //first do not move where other are
         bool attacked = false;
         for (const auto & piece : p2->pieces) {
+            if (piece.name == "Pawn") {
+
+                if (chosen_piece.color == "white") {
+                    move_pawn = &move_pawn_white;
+                }
+                else if (chosen_piece.color == "black") {
+                    move_pawn = &move_pawn_black;
+                }
+                if (piece.position.x + (*move_pawn)[1][0] == next_position.x && piece.position.y + (*move_pawn)[1][1]== next_position.y) {
+                    attacked = true;
+                    break;
+                }
+                if (piece.position.x + (*move_pawn)[2][0] == next_position.x && piece.position.y + (*move_pawn)[2][1]== next_position.y) {
+                    attacked = true;
+                    break;
+                }
+                continue;
+            }
             for (const auto & move : piece.moves_history) {
                 for (const auto & k : move.moves) {
                     if (k.x == next_position.x && k.y == next_position.y) {
@@ -352,6 +372,7 @@ Moves king_moves(const Board& board, const Piece& chosen_piece) {
                         break;
                     }
                 }
+
 
             }
         }
