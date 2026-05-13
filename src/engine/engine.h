@@ -67,7 +67,7 @@ public:
     Player(const std::string& name, const std::string color);
     void init_pieces();
     void remove_piece(const Position pos);
-    void apply_move(const std::string& piece_name, const Position pos, Player& player);
+    bool apply_move(const std::string& piece_name, const Position pos, Player& player);
 };
 
 
@@ -107,7 +107,7 @@ bool check_postion(const Position p1, const Position p2);
 bool check_move(const Board& board, const Position current_pos);
 bool validate(Position current_position, Position next_position,Board board);
 std::vector<Position> intersection(const std::vector<Position>& moves1, const std::vector<Position> moves2);
-
+bool validate_move(const Board& board, Position current_position, Position next_position, std::string color,std::string piece_name);
 
 
 //minmax

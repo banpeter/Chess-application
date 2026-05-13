@@ -14,7 +14,7 @@ bool check_postion(const Position p1, const Position p2) {
 //TODO also do overlap checking with the same color
 bool check_move(const Board& board, const Position next_pos) {
 
-    int overlap = -1;
+    int overlap = 0;
 
     for (const auto& player : board.players) {
         for (const auto& pl : player.pieces) {
@@ -26,11 +26,11 @@ bool check_move(const Board& board, const Position next_pos) {
             }
         }
     }
-
     return false;
 }
 
-bool validate(Position current_position, Position next_position,Board board) {
+//review, during move generation these constraints are already examined
+bool validate_on_board(Position current_position, Position next_position,Board board) {
 
     //TODO pass these as pointers
 
@@ -50,10 +50,33 @@ bool validate(Position current_position, Position next_position,Board board) {
     else if (!inside) {
         return false;
     }
+    return false;
+}
+
+bool validate_move(const Board& board, Position current_position, Position next_position, std::string color,std::string piece_name) {
+    bool on_board = validate_on_board( current_position,  next_position, board);
+    int index = color == "white" ? 1 : 0;
+    for (const auto& piece : board.players[index].pieces) {
+        if (piece.name == piece_name) {
+            Moves possible_moves = piece.moves_history.back();
+            for (auto pos : possible_moves.moves) {
+                if (check_postion(pos,next_position)) {
+                    return true;
+                }
+            }
+            for (auto pos : possible_moves.captures) {
+                if (check_postion(pos,next_position)) {
+                    return true;
+                }
+            }
+
+        }
+    }
 
 
     return false;
 }
+
 int color_to_index(const std::string& color) {
     if (color == "white") {
         return 0;

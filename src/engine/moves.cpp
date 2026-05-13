@@ -1,6 +1,9 @@
 //
 // Created by peter on 2026. 05. 02..
 //
+#include <iostream>
+#include <ostream>
+
 #include "engine.h"
 
 
@@ -169,9 +172,10 @@ Moves pawn_moves(const Board& board, const Piece& chosen_piece) {
     Position next_position = chosen_piece.position;
     bool inside = true;
     bool capture = false;
+    int first_move = 2;
 
     const std::vector<std::vector<int>> move_pawn_white = {{0,1},  {1,1},  {-1,1} };
-    const std::vector<std::vector<int>> move_pawn_black = {{0,-1},  {1,-1},  {-1,-1}  };
+    const std::vector<std::vector<int>> move_pawn_black = {{0,-1},  {1,-1},  {-1,-1}};
 
     const std::vector<std::vector<int>> *move_pawn = nullptr;
     if (chosen_piece.color == "white") {
@@ -179,16 +183,34 @@ Moves pawn_moves(const Board& board, const Piece& chosen_piece) {
     }
     else if (chosen_piece.color == "black") {
         move_pawn = &move_pawn_black;
+        first_move = -2;
+    }
+    std::vector<Position> moves_section;
+    if (!chosen_piece.moved) {
+        next_position.x += 0;
+        next_position.y += first_move;
+        inside = next_position.inside();
+        capture = check_move(board,next_position);
+        if (inside && !capture) {
+            captures_mask.push_back(0);
+            moves_pos.push_back(next_position);
+        }
+        moves_section.push_back(next_position);
+        moves_sections.push_back(moves_section);
+        next_position.x += 0;
+        next_position.y -= first_move;
     }
 
 
     for (int i = 0; i < move_pawn->size(); i++) {
-        std::vector<Position> moves_section;
+
 
         next_position.x += (*move_pawn)[i][0];
         next_position.y += (*move_pawn)[i][1];
         inside = next_position.inside();
-        capture = check_move(board,chosen_piece.position);
+        capture = check_move(board,next_position);
+
+
 
         if (inside && !capture && i == 0) {
             captures_mask.push_back(0);
@@ -203,7 +225,7 @@ Moves pawn_moves(const Board& board, const Piece& chosen_piece) {
         next_position = chosen_piece.position;
 
     }
-
+    //std::cout << "Pawn Moves generated" << std::endl;
     auto moves = Moves(moves_pos,captures,moves_sections,captures_mask);
     return moves;
 }

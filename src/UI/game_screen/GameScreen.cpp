@@ -24,13 +24,13 @@ GameScreen::GameScreen(QWidget *parent) : QWidget(parent) {
     
     boardView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     boardView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    boardView->setFixedSize(480, 480);
+    boardView->setFixedSize(500, 500);
 
     drawBoard();
 
     mainLayout->addLayout(topBarLayout);
-    mainLayout->addWidget(boardView, 0, Qt::AlignCenter); 
-    
+    mainLayout->addWidget(boardView, 0, Qt::AlignCenter);
+
     //pieces
     //black
     setupPiece(":/resources/pieces/rook-b.svg",   0, 0, PieceColor::Black, PieceType::Rook);
@@ -79,21 +79,21 @@ GameScreen::GameScreen(QWidget *parent) : QWidget(parent) {
 
 void GameScreen::drawBoard() {
     const int squareSize = 60;
-    
+
     QColor white(240, 217, 181);
     QColor black(181, 136, 99);
 
     for (int row = 0; row < 8; ++row) {
         for (int col = 0; col < 8; ++col) {
-            
+
             QGraphicsRectItem *square = new QGraphicsRectItem(col * squareSize, row * squareSize, squareSize, squareSize);
-            
+
             if ((row + col) % 2 == 0) {
                 square->setBrush(QBrush(white));
             } else {
                 square->setBrush(QBrush(black));
             }
-            
+
             square->setPen(Qt::NoPen);
             boardScene->addItem(square);
         }
@@ -102,28 +102,25 @@ void GameScreen::drawBoard() {
 
 void GameScreen::setupPiece(const QString& svgPath, int col, int row, PieceColor color, PieceType type) {
     ChessPiece* piece = new ChessPiece(svgPath);
-    piece->setScale(0.5); 
-    piece->setPos(col * 60, row * 60); 
-    
+    piece->setScale(0.5);
+    piece->setPos(col * 60, row * 60);
+
     piece->setPieceColor(color);
     piece->setPieceType(type);
     piece->setGridPosition(col, row);
-    
+
     connect(piece, &ChessPiece::moveRequested, this, &GameScreen::onMoveRequested);
-    
+
     boardScene->addItem(piece);
     pieceRegistry[col][row] = piece;
 }
 
-
-
-
 void GameScreen::onMoveRequested(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow) {
-    
-    if ((piece->getPieceColor() == *currentTurn && controller->isValidMove(piece, fromCol, fromRow, toCol, toRow)) ) {
+    const int SQUARE_SIZE = 60;
+
+    if (controller->isValidMove(piece, fromCol, fromRow, toCol, toRow)) {
         executeMove(fromCol, fromRow, toCol, toRow);
-        controller->triggerEngineMove();
-        
+
     } else {
         piece->setPos(fromCol * 60, fromRow * 60);
     }
@@ -132,9 +129,6 @@ void GameScreen::onMoveRequested(ChessPiece* piece, int fromCol, int fromRow, in
 void GameScreen::onEngineMoved(int fromCol, int fromRow, int toCol, int toRow) {
     executeMove(fromCol, fromRow, toCol, toRow);
 }
-
-
-
 
 void GameScreen::promotePawn(int col, int row, PieceColor color) {
     QMessageBox msgBox(this);
@@ -174,8 +168,7 @@ void GameScreen::promotePawn(int col, int row, PieceColor color) {
     }
 
     // create the new piece and place it on the board
-    setupPiece(svgPath, col, row, color, selectedType); 
-    controller->promotePawnToEngine(col, row, color, selectedType); // inform the engine about the promotion
+    setupPiece(svgPath, col, row, color, selectedType);
 }
 
 void GameScreen::executeMove(int fromCol, int fromRow, int toCol, int toRow) {
@@ -185,13 +178,13 @@ void GameScreen::executeMove(int fromCol, int fromRow, int toCol, int toRow) {
     //handle capture
     if (pieceRegistry[toCol][toRow] != nullptr) {
         boardScene->removeItem(pieceRegistry[toCol][toRow]);
-        delete pieceRegistry[toCol][toRow];
+        //delete pieceRegistry[toCol][toRow];
     }
 
     //move piece
     pieceToMove->setPos(toCol * 60, toRow * 60);
     pieceToMove->setGridPosition(toCol, toRow);
-    
+
     pieceRegistry[toCol][toRow] = pieceToMove;
     pieceRegistry[fromCol][fromRow] = nullptr;
 
@@ -203,6 +196,4 @@ void GameScreen::executeMove(int fromCol, int fromRow, int toCol, int toRow) {
             promotePawn(toCol, toRow, PieceColor::Black);
         }
     }
-
-    *currentTurn = (*currentTurn == PieceColor::White) ? PieceColor::Black : PieceColor::White;
 }

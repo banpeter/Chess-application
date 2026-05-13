@@ -2,6 +2,7 @@
 #include "engine/engine.h"
 #include "iostream"
 
+#define CALIB 7
 ChessController::ChessController(QObject *parent) : QObject(parent) {
     // backendGame = new Core::Game();
 
@@ -10,62 +11,61 @@ ChessController::ChessController(QObject *parent) : QObject(parent) {
 
 bool ChessController::isValidMove(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow) {
     // if the user places a pice to the same square
+    fromRow = CALIB - fromRow;
+    toRow = CALIB - toRow;
     if (fromCol == toCol && fromRow == toRow) {
         return false;
     }
     std::cout << "Generating moves" << std::endl;
     for(auto& p : board.players[0].pieces) {
-        std::cout << "Generate move" << std::endl;
+        //std::cout << "Generate move" << std::endl;
         p.move(board);
     }
     std::cout << "Moves generated" << std::endl;
-    /*for(auto p : board.players[1].pieces) {
-        p.move(board);
-    }*/
+    //check valid move
+    //TODO create Position from the int values
+    Position current_position = Position(fromCol, toCol);
+    Position next_position = Position(toCol, toRow);
+    //bool isValid = validate_move( board,  current_position,  next_position, color, piece_name) ;
+    //bool isValid = true;
+
+    //apply move
+    std::string pieceName = "";
+    if (piece->getPieceType() == PieceType::Pawn) {
+        pieceName = "Pawn";
+    }
+    else if (piece->getPieceType() == PieceType::Knight) {
+        pieceName = "Knight";
+    }
+    else if (piece->getPieceType() == PieceType::Bishop) {
+        pieceName = "Bishop";
+    }
+    else if (piece->getPieceType() == PieceType::Rook) {
+        pieceName = "Rook";
+    }
+    else if (piece->getPieceType() == PieceType::Queen) {
+        pieceName = "Queen";
+    }
+    else if (piece->getPieceType() == PieceType::King) {
+        pieceName = "King";
+    }
+
+    //validates. If valid apply, otherwise do not do anything
+    bool isValid = board.players[0].apply_move( pieceName,  next_position, board.players[1]);
+    //TODO test
+    //TODO MinMAX
+
 
     // bool isValid = backendGame->validate_move(fromSquare.toStdString(), toSquare.toStdString());
-    bool isValid = true;
+
 
     if (isValid) {
-        qDebug() << "[Controller] valid move: " << fromCol << fromRow << "->" << toCol << toRow;
-        
+        qDebug() << "[Controller] Valid move: " << fromCol << fromRow << "->" << toCol << toRow;
+        // backendGame->make_move(
+
     } else {
-        qDebug() << "[Controller] invalid move: " << fromCol << fromRow << "->" << toCol << toRow;
-        return false;
+        qDebug() << "[Controller] Invalid move: " << fromCol << fromRow << "->" << toCol << toRow;
     }
 
     return isValid;
-}
-
-void ChessController::triggerEngineMove() {
-
-        // INPUT for engine moves, this method is called after the user makes a move, so the engine can respond with its move
-        //emit movePieceCommand(fromCol, fromRow, toCol, toRow);
-}
-
-
-void ChessController::promotePawnToEngine(int col, int row, PieceColor color, PieceType selectedType) {
-    
-    // this method informs the engine about the promotion, so it can update its internal board
-}
-
-
-QString ChessController::pieceTypeToString(PieceType type) {
-    switch (type) {
-        case PieceType::Pawn: return "pawn";
-        case PieceType::Rook: return "rook";
-        case PieceType::Knight: return "knight";
-        case PieceType::Bishop: return "bishop";
-        case PieceType::Queen: return "queen";
-        case PieceType::King: return "king";
-        default: return "";
-    }
-}
-
-QString ChessController::pieceColorToString(PieceColor color) {
-    switch (color) {
-        case PieceColor::White: return "white";
-        case PieceColor::Black: return "black";
-        default: return "";
-    }
 }

@@ -52,50 +52,54 @@ void Player::init_pieces() {
         pieces.push_back(Piece("Bishop", Position(6,0),color));
 
         for (int i = 0; i < 8; i++) {
-            pieces_pawns.push_back(Piece(color, Position(i,y),color));
+            //pieces_pawns.push_back(Piece(color, Position(i,y),color));
+            pieces.push_back(Piece("Pawn", Position(i,y),color));
         }
     }
     else if (color == "black") {
         y = 7;
-        pieces.push_back(Piece("King", Position(4,8),color));
-        pieces.push_back(Piece("Queen", Position(5,8),color));
+        pieces.push_back(Piece("King", Position(4,7),color));
+        pieces.push_back(Piece("Queen", Position(5,7),color));
 
-        pieces.push_back(Piece("Rook", Position(0,8),color));
-        pieces.push_back(Piece("Knight", Position(1,8),color));
-        pieces.push_back(Piece("Bishop", Position(3,8),color));
+        pieces.push_back(Piece("Rook", Position(0,7),color));
+        pieces.push_back(Piece("Knight", Position(1,7),color));
+        pieces.push_back(Piece("Bishop", Position(3,7),color));
 
-        pieces.push_back(Piece("Rook", Position(8,8),color));
-        pieces.push_back(Piece("Knight", Position(7,8),color));
-        pieces.push_back(Piece("Bishop", Position(6,8),color));
+        pieces.push_back(Piece("Rook", Position(8,7),color));
+        pieces.push_back(Piece("Knight", Position(7,7),color));
+        pieces.push_back(Piece("Bishop", Position(6,7),color));
 
         for (int i = 0; i < 8; i++) {
-            pieces_pawns.push_back(Piece(color, Position(i,y),color));
+            pieces_pawns.push_back(Piece("Pawn", Position(i,y),color));
         }
     }
     std::cout << "Adding pawns" << std::endl;
 }
 
 
-void Player::apply_move(const std::string &piece_name, const Position pos, Player& player) {
+bool Player::apply_move(const std::string &piece_name, const Position next_pos, Player& other_player) {
 
-    for (auto p : pieces) {
+    for (auto &p : pieces) {
         if (p.name == piece_name) {
             for (auto valid_move : p.moves_history.back().moves) {
-                if (check_postion(pos,valid_move)) {
-                    p.set_position(pos);
-                    return;
+                if (check_postion(next_pos,valid_move)) {
+                    p.set_position(next_pos);
+                    p.moved = true;
+                    return true;
                 }
             }for (auto valid_move : p.moves_history.back().captures) {
-                if (check_postion(pos,valid_move)) {
-                    p.set_position(pos);
-                    player.remove_piece(valid_move);
+                if (check_postion(next_pos,valid_move)) {
+                    p.set_position(next_pos);
+                    other_player.remove_piece(valid_move);
+                    p.moved = true;
                     //remove teh piece at the given position
-                    return;
+                    return true;
                 }
             }
 
         }
     }
+    return false;
 }
 
 
