@@ -14,10 +14,10 @@ class ChessController : public QObject {
 public:
     explicit ChessController(QObject *parent = nullptr);
 
-    bool isValidMove(int fromCol, int fromRow, int toCol, int toRow);
+    bool isValidMove(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow);
 
     void triggerEngineMove();
-    void promotePawnToEngine(int col, int row, PieceType selectedType);
+    void promotePawnToEngine(int col, int row, PieceColor color, PieceType selectedType);
 
     
     signals:
@@ -25,7 +25,6 @@ public:
     void gameOverCommand(const QString& message);
     
     private:
-    // Board engineBoard;
     QString pieceTypeToString(PieceType type);
     QString pieceColorToString(PieceColor color);
 };

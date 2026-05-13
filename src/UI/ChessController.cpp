@@ -38,17 +38,17 @@ bool ChessController::isValidMove(ChessPiece* piece, int fromCol, int fromRow, i
 }
 
 void ChessController::triggerEngineMove() {
-        
-        //dummy move
-        int fromCol = 1; 
-        int fromRow = 0; 
-        int toCol = 2;   
-        int toRow = 2;   
 
-        qDebug() << "[Engine] move: " << fromCol << fromRow << " -> " << toCol << toRow;
-
-        emit movePieceCommand(fromCol, fromRow, toCol, toRow);
+        // INPUT for engine moves, this method is called after the user makes a move, so the engine can respond with its move
+        //emit movePieceCommand(fromCol, fromRow, toCol, toRow);
 }
+
+
+void ChessController::promotePawnToEngine(int col, int row, PieceColor color, PieceType selectedType) {
+    
+    // this method informs the engine about the promotion, so it can update its internal board
+}
+
 
 QString ChessController::pieceTypeToString(PieceType type) {
     switch (type) {

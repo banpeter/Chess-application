@@ -115,9 +115,12 @@ void GameScreen::setupPiece(const QString& svgPath, int col, int row, PieceColor
     pieceRegistry[col][row] = piece;
 }
 
+
+
+
 void GameScreen::onMoveRequested(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow) {
     
-    if ((piece->getPieceColor() == *currentTurn && controller->isValidMove(fromCol, fromRow, toCol, toRow)) ) {
+    if ((piece->getPieceColor() == *currentTurn && controller->isValidMove(piece, fromCol, fromRow, toCol, toRow)) ) {
         executeMove(fromCol, fromRow, toCol, toRow);
         controller->triggerEngineMove();
         
@@ -129,6 +132,9 @@ void GameScreen::onMoveRequested(ChessPiece* piece, int fromCol, int fromRow, in
 void GameScreen::onEngineMoved(int fromCol, int fromRow, int toCol, int toRow) {
     executeMove(fromCol, fromRow, toCol, toRow);
 }
+
+
+
 
 void GameScreen::promotePawn(int col, int row, PieceColor color) {
     QMessageBox msgBox(this);
@@ -169,7 +175,7 @@ void GameScreen::promotePawn(int col, int row, PieceColor color) {
 
     // create the new piece and place it on the board
     setupPiece(svgPath, col, row, color, selectedType); 
-    controller->promotePawnToEngine(col, row, selectedType); // inform the engine about the promotion
+    controller->promotePawnToEngine(col, row, color, selectedType); // inform the engine about the promotion
 }
 
 void GameScreen::executeMove(int fromCol, int fromRow, int toCol, int toRow) {
