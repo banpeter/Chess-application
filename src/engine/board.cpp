@@ -45,8 +45,8 @@ void Player::init_pieces() {
         pieces.push_back(Piece("Rook", Position(0,0),color));
         pieces.push_back(Piece("Knight", Position(1,0),color));
         pieces.push_back(Piece("Bishop", Position(2,0),color));
-        pieces.push_back(Piece("King", Position(3,0),color));
-        pieces.push_back(Piece("Queen", Position(4,0),color));
+        pieces.push_back(Piece("King", Position(4,0),color));
+        pieces.push_back(Piece("Queen", Position(3,0),color));
 
 
         pieces.push_back(Piece("Bishop", Position(5,0),color));
