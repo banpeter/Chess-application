@@ -24,7 +24,7 @@ GameScreen::GameScreen(QWidget *parent) : QWidget(parent) {
     
     boardView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     boardView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    boardView->setFixedSize(500, 500);
+    boardView->setFixedSize(480, 480);
 
     drawBoard();
 
@@ -116,10 +116,10 @@ void GameScreen::setupPiece(const QString& svgPath, int col, int row, PieceColor
 }
 
 void GameScreen::onMoveRequested(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow) {
-    const int SQUARE_SIZE = 60;
     
-    if (controller->isValidMove(piece, fromCol, fromRow, toCol, toRow)) {
+    if ((piece->getPieceColor() == *currentTurn && controller->isValidMove(fromCol, fromRow, toCol, toRow)) ) {
         executeMove(fromCol, fromRow, toCol, toRow);
+        controller->triggerEngineMove();
         
     } else {
         piece->setPos(fromCol * 60, fromRow * 60);
@@ -169,6 +169,7 @@ void GameScreen::promotePawn(int col, int row, PieceColor color) {
 
     // create the new piece and place it on the board
     setupPiece(svgPath, col, row, color, selectedType); 
+    controller->promotePawnToEngine(col, row, selectedType); // inform the engine about the promotion
 }
 
 void GameScreen::executeMove(int fromCol, int fromRow, int toCol, int toRow) {
@@ -196,4 +197,6 @@ void GameScreen::executeMove(int fromCol, int fromRow, int toCol, int toRow) {
             promotePawn(toCol, toRow, PieceColor::Black);
         }
     }
+
+    *currentTurn = (*currentTurn == PieceColor::White) ? PieceColor::Black : PieceColor::White;
 }

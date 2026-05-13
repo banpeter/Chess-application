@@ -32,6 +32,8 @@ private:
 
     ChessPiece* pieceRegistry[8][8];
 
+    PieceColor *currentTurn = new PieceColor(PieceColor::White);
+
     ChessController* controller;
 
     void drawBoard();

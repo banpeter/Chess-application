@@ -27,12 +27,45 @@ bool ChessController::isValidMove(ChessPiece* piece, int fromCol, int fromRow, i
     bool isValid = true;
 
     if (isValid) {
-        qDebug() << "[Controller] Valid move: " << fromCol << fromRow << "->" << toCol << toRow;
-        // backendGame->make_move(
+        qDebug() << "[Controller] valid move: " << fromCol << fromRow << "->" << toCol << toRow;
         
     } else {
-        qDebug() << "[Controller] Invalid move: " << fromCol << fromRow << "->" << toCol << toRow;
+        qDebug() << "[Controller] invalid move: " << fromCol << fromRow << "->" << toCol << toRow;
+        return false;
     }
 
     return isValid;
+}
+
+void ChessController::triggerEngineMove() {
+        
+        //dummy move
+        int fromCol = 1; 
+        int fromRow = 0; 
+        int toCol = 2;   
+        int toRow = 2;   
+
+        qDebug() << "[Engine] move: " << fromCol << fromRow << " -> " << toCol << toRow;
+
+        emit movePieceCommand(fromCol, fromRow, toCol, toRow);
+}
+
+QString ChessController::pieceTypeToString(PieceType type) {
+    switch (type) {
+        case PieceType::Pawn: return "pawn";
+        case PieceType::Rook: return "rook";
+        case PieceType::Knight: return "knight";
+        case PieceType::Bishop: return "bishop";
+        case PieceType::Queen: return "queen";
+        case PieceType::King: return "king";
+        default: return "";
+    }
+}
+
+QString ChessController::pieceColorToString(PieceColor color) {
+    switch (color) {
+        case PieceColor::White: return "white";
+        case PieceColor::Black: return "black";
+        default: return "";
+    }
 }
