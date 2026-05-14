@@ -75,6 +75,7 @@ bool ChessController::isValidMove(ChessPiece* piece, int fromCol, int fromRow, i
     //TODO check for checkmate and check if valid
     //TODO MinMAX
     //modify board and return position to update
+    //PosChange change_position =  best_move(board, 0, "white",0);
 
 
     // bool isValid = backendGame->validate_move(fromSquare.toStdString(), toSquare.toStdString());
@@ -123,4 +124,18 @@ void ChessController::promotePawnToEngine(int col, int row, PieceColor color, Pi
     //TODO check for checkmate and check
 
     // this method informs the engine about the promotion, so it can update its internal board
+}
+
+void ChessController::triggerEngineMove() {
+    // Dummy engine move
+
+
+
+    PosChange change_position =  best_move(board, 0, "white",0);
+
+    std::cout << change_position.prev.x << std::endl;
+    emit movePieceCommand(change_position.prev.x, CALIB-change_position.prev.y, change_position.current.x, CALIB-change_position.current.y, ""); //alapból üres, ha átváltozás van beírni mit
+
+
+
 }

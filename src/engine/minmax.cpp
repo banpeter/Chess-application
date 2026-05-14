@@ -80,6 +80,10 @@ Board apply_move(Board board,std::string piece_name, Position pos, unsigned int 
 //TODO add checkmate
 int minimax(Board board,int depth, int alpha, int beta,bool is_maximizing, unsigned int index, unsigned int index2) {
 
+    /*
+     * if amximizing curent player is black
+     * if minimizing current player is white
+     */
 
 
     if (depth > 50) {
@@ -278,32 +282,40 @@ PosChange best_move(Board& root, int depth, std::string color, int which_player)
 
     Position current_position = Position(-1, -1);
     Position next_position = Position(-1, -1);
+    std::string pieceName;
     int score = 0;
 
     for(auto& p : root.players[1].pieces) {
         p.move(root);
     }
-
+    std::cout<<"startminax"<<std::endl;
     for(auto& p : root.players[1].pieces) {
         for (const auto & move : p.moves_history) {
             for (const auto & k : move.moves) {
                 Board pboard= apply_move(root,p.name,k,index,index2);
                 score = minimax(pboard, depth - 1, alpha, beta, false, index, index2);
-                if (score <= best_score) {
+                if (score >= best_score) {
                     best_score = score;
                     current_position.x = p.position.x;
                     current_position.y = p.position.y;
-                    next_position.x = p.position.x+k.x;
-                    next_position.y = p.position.y+k.y;
+                    next_position.x = p.position.x + (p.position.x-k.x);
+                    next_position.y = p.position.y + (p.position.x-k.y);
+                    pieceName = p.name;
+
                 }
             }
 
         }
     }
 
+    bool isValid =  root.players[1].apply_move(root, pieceName, current_position, next_position, root.players[0]);
 
     //for loop for the first move
 
     PosChange poschange = {current_position, next_position};
+    std::cout<<"poschange"<<std::endl;
+    std::cout<< isValid <<std::endl;
+    std::cout<<"poschange" << current_position.x << " " << current_position.y <<std::endl;
+    std::cout<<"poschange" << next_position.x << " " << next_position.y <<std::endl;
     return poschange;
 }

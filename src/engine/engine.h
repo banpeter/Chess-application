@@ -18,9 +18,15 @@ public:
     bool inside();
 };
 
+struct PosChange {
+    Position prev;
+    Position current;
+};
+
 class Moves {
 public:
     //moves in one direction, is it check ->King ahs possible move outise of those, otehr pices canhas valide move with the moves in one direction
+
     std::vector<Position> moves;
     std::vector<Position> captures;
     std::vector<std::vector<Position>> moves_sections;
@@ -115,12 +121,11 @@ bool check_mate(const Board& board, const Piece& king);
 bool check(const Board& board, const Piece& king);
 
 //minmax
+
+
 int value(std::string name);
 int evaluate(const Board& board,std::string color);
+PosChange best_move(Board& root, int depth, std::string color, int which_player);
 
-struct PosChange {
-    Position prev;
-    Position current;
-};
 
 #endif //CHESS_ENGINE_ENGINE_H

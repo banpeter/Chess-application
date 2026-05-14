@@ -16,12 +16,15 @@ public:
 
     bool isValidMove(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow);
 
+
+
     void triggerEngineMove();
     void promotePawnToEngine(int col, int row, PieceColor color, PieceType selectedType);
 
     
     signals:
-    void movePieceCommand(int fromCol, int fromRow, int toCol, int toRow);
+    void movePieceCommand(int fromCol, int fromRow, int toCol, int toRow, QString promotedTo = "");
+    //void movePieceCommand(int fromCol, int fromRow, int toCol, int toRow);
     void gameOverCommand(const QString& message);
     
     private:

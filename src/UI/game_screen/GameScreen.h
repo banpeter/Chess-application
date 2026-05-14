@@ -30,7 +30,7 @@ private:
     QGraphicsView *boardView;
     QGraphicsScene *boardScene;
 
-    ChessPiece* pieceRegistry[8][8];
+    ChessPiece* pieceRegistry[8][8] = {nullptr};
 
     PieceColor *currentTurn = new PieceColor(PieceColor::White);
 

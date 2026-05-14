@@ -115,7 +115,7 @@ void GameScreen::setupPiece(const QString& svgPath, int col, int row, PieceColor
     pieceRegistry[col][row] = piece;
 }
 
-void GameScreen::onMoveRequested(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow) {
+/*void GameScreen::onMoveRequested(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow) {
     const int SQUARE_SIZE = 60;
 
     if (controller->isValidMove(piece, fromCol, fromRow, toCol, toRow)) {
@@ -124,7 +124,21 @@ void GameScreen::onMoveRequested(ChessPiece* piece, int fromCol, int fromRow, in
     } else {
         piece->setPos(fromCol * 60, fromRow * 60);
     }
+}*/
+
+void GameScreen::onMoveRequested(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow) {
+
+    if (( controller->isValidMove(piece, fromCol, fromRow, toCol, toRow)) ) {
+        executeMove(fromCol, fromRow, toCol, toRow);
+
+        controller->triggerEngineMove();
+
+
+    } else {
+        piece->setPos(fromCol * 60, fromRow * 60);
+    }
 }
+
 
 void GameScreen::onEngineMoved(int fromCol, int fromRow, int toCol, int toRow) {
     executeMove(fromCol, fromRow, toCol, toRow);
@@ -177,8 +191,8 @@ void GameScreen::executeMove(int fromCol, int fromRow, int toCol, int toRow) {
 
     //handle capture
     if (pieceRegistry[toCol][toRow] != nullptr) {
-        //boardScene->removeItem(pieceRegistry[toCol][toRow]);
-        //delete pieceRegistry[toCol][toRow];
+        boardScene->removeItem(pieceRegistry[toCol][toRow]);
+        delete pieceRegistry[toCol][toRow];
     }
 
     //move piece
