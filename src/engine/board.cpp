@@ -76,25 +76,24 @@ void Player::init_pieces() {
             pieces.push_back(Piece("Pawn", Position(i,y),color));
         }
     }
-    std::cout << "Adding pawns" << std::endl;
+
 }
 
 
 bool Player::apply_move(Board board,const std::string &piece_name, const Position curr_pos, const Position next_pos, Player& other_player) {
-    //cehck for check. If it was already check return false
+
     for (auto &p : pieces) {
-        if (p.name == piece_name && check_postion(p.position,curr_pos)) {//TODO and position is hte same
+        if (p.name == piece_name && check_postion(p.position,curr_pos)) {
             for (auto valid_move : p.moves_history.back().moves) {
                 if (check_postion(next_pos,valid_move)) {
-                    //save prev pos
+
                     Position prev_position = Position(p.position.x, p.position.y);
                     p.set_position(next_pos);
                     if (check(board,p) && piece_name == "King") {
                         p.set_position(prev_position);
                         continue;
                     }
-                    //check for check
-                    //if check invalidate and revert
+
                     p.moved = true;
                     return true;
                 }
@@ -120,7 +119,6 @@ bool Player::apply_move(Board board,const std::string &piece_name, const Positio
 
 
 void Player::remove_piece(const Position pos) {
-    //auto& piece = pieces;
 
     std::erase_if(pieces, [&](const auto& p) {
         return check_postion(p.position, pos);

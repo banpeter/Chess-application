@@ -106,7 +106,7 @@ bool check_mate(const Board& board, const Piece& king) {
     std::vector<std::vector<Position>> moves_sections;
     std::vector<Piece> attacking_pieces;
 
-    //find attacking piceces and the coresponding section of moves
+
     //
     int color = -1;
 

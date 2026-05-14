@@ -356,12 +356,12 @@ Moves king_moves(const Board& board, const Piece& chosen_piece) {
                 }
                 if (piece.position.x + (*move_pawn)[1][0] == next_position.x && piece.position.y + (*move_pawn)[1][1]== next_position.y) {
                     attacked = true;
-                    std::cout << "attacked by pawn" << std::endl;
+
                     break;
                 }
                 if (piece.position.x + (*move_pawn)[2][0] == next_position.x && piece.position.y + (*move_pawn)[2][1]== next_position.y) {
                     attacked = true;
-                    std::cout << "attacked by pawn" << std::endl;
+
                     break;
                 }
                 continue;
@@ -377,9 +377,7 @@ Moves king_moves(const Board& board, const Piece& chosen_piece) {
 
             }
         }
-        if (attacked) {
-            std::cout << "attacked" << std::endl;
-        }
+
         //free tile
         if (inside && !occupied && !capture && !attacked) {
             free_tile_c++;
