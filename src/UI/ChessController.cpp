@@ -52,8 +52,9 @@ bool ChessController::isValidMove(ChessPiece* piece, int fromCol, int fromRow, i
 
     //validates. If valid apply, otherwise do not do anything
     bool isValid = board.players[0].apply_move( pieceName, current_position, next_position, board.players[1]);
-    //TODO test
+
     //TODO MinMAX
+    //modify board and return position to update
 
 
     // bool isValid = backendGame->validate_move(fromSquare.toStdString(), toSquare.toStdString());
@@ -68,4 +69,36 @@ bool ChessController::isValidMove(ChessPiece* piece, int fromCol, int fromRow, i
     }
 
     return isValid;
+}
+
+
+std::string convert(PieceType selectedType) {
+    std::string pieceName = "";
+    if (selectedType == PieceType::Pawn) {
+        pieceName = "Pawn";
+    }
+    else if (selectedType == PieceType::Knight) {
+        pieceName = "Knight";
+    }
+    else if (selectedType == PieceType::Bishop) {
+        pieceName = "Bishop";
+    }
+    else if (selectedType == PieceType::Rook) {
+        pieceName = "Rook";
+    }
+    else if (selectedType == PieceType::Queen) {
+        pieceName = "Queen";
+    }
+    else if (selectedType == PieceType::King) {
+        pieceName = "King";
+    }
+    return pieceName;
+}
+
+void ChessController::promotePawnToEngine(int col, int row, PieceColor color, PieceType selectedType) {
+    std::string scolor = "white"; //the user is always white
+    std::string ptype = convert(selectedType);
+
+
+    // this method informs the engine about the promotion, so it can update its internal board
 }

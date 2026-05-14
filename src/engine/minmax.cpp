@@ -108,10 +108,14 @@ int minimax(Board board,int depth, int alpha, int beta,bool is_maximizing, unsig
     for (int i = 0; i < possible_moves.size(); i++) {
         for (int j = 0; j < possible_moves[i].moves.size(); j++) {
             Board pboard= apply_move(board,piece_names[i],possible_moves[i].moves[j],index2,index2);
+            //if promote generate all possibility for promotion
+            //check for check and checkmate
             possible_boards.push_back(pboard);
         }
         for (int j = 0; j < possible_moves[i].moves.size(); j++) {
             Board pboard= apply_move(board,piece_names[i],possible_moves[i].captures[j],index2,index2);
+            //if promote generate all possibility for promotion
+            //check for check and checkmate
             possible_boards.push_back(pboard);
         }
 
@@ -149,9 +153,8 @@ int minimax(Board board,int depth, int alpha, int beta,bool is_maximizing, unsig
 }
 
 
-
-
 // Find the best move from root
+//TODO return position
 int best_move(Board root, int depth, std::string color, int which_player) {
     int best_score = std::numeric_limits<int>::min();
     int best_idx   = -1;
@@ -170,6 +173,10 @@ int best_move(Board root, int depth, std::string color, int which_player) {
         index2 = 0;
     }
     index += which_player;
+
+    std::vector<Moves> possible_moves;
+    std::vector<std::string> piece_names;
+    std::vector<Board> possible_boards;
 
 
     int score = minimax(root, depth - 1, alpha, beta, false, index, index2);

@@ -182,9 +182,6 @@ bool check_mate(const Board& board, const Piece& king) {
     if (attacking_pieces.size() == 1 && king.moves_history.back().moves.empty()) {
         return true;
     }
-    //TODO additional rules and constraints can be added
-    //plus TODO find if other pieces can attack the attaking piceces
-    //plus TODO find if other pieces can interfer
 
     for(auto p : board.players[1].pieces) {
         p.move(board);
@@ -194,3 +191,30 @@ bool check_mate(const Board& board, const Piece& king) {
 
 }
 
+void promote_pawn(Board& board, const Position pos, const std::string piece_name, std::string color) {
+    //find piece based on position
+    //based on name create a new piece
+    for(auto p : board.players[0].pieces) {
+        if (p.name == piece_name && check_postion(pos,p.position)) {
+            std::erase_if(board.players[0].pieces, [&pos](const Piece& p) {
+                return p.position.x == pos.x && p.position.y == pos.y;
+            });
+            //upgrade
+            if (piece_name == "Rook") {
+                board.players[0].pieces.push_back(Piece("Rook", Position(pos.x,pos.y),color));
+            }
+            else if (piece_name == "Knight") {
+                board.players[0].pieces.push_back(Piece("Knight", Position(pos.x,pos.y),color));
+            }
+            else if (piece_name == "Bishop") {
+                board.players[0].pieces.push_back(Piece("Bishop", Position(pos.x,pos.y),color));
+            }
+            else if (piece_name == "Queen") {
+                board.players[0].pieces.push_back(Piece("Queen", Position(pos.x,pos.y),color));
+            }
+            return;
+        }
+    }
+
+
+}
