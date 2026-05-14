@@ -15,13 +15,13 @@ void Position::print() const {
 }
 
 bool Position::upgrade(const std::string& color, const std::string& name) {
-    if (color == "white" && name == "pawn" && y == 8) return true;
+    if (color == "white" && name == "pawn" && y == 7) return true;
     if (color == "black" && name == "pawn" && y == 0) return true;
     return false;
 }
 
 bool Position::inside() {
-    if (x >= 0 && x <= 8 && y >= 0 && y <= 8) return true;
+    if (x >= 0 && x <= 7 && y >= 0 && y <= 7) return true;
     return false;
 }
 

@@ -131,7 +131,7 @@ void ChessController::triggerEngineMove() {
 
 
 
-    PosChange change_position =  best_move(board, 0, "white",0);
+    PosChange change_position =  best_move(board, 0, "black",0);
 
     std::cout << change_position.prev.x << std::endl;
     emit movePieceCommand(change_position.prev.x, CALIB-change_position.prev.y, change_position.current.x, CALIB-change_position.current.y, ""); //alapból üres, ha átváltozás van beírni mit
