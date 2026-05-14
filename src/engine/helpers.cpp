@@ -144,6 +144,7 @@ bool check(const Board& board, const Piece& king) {
 
         }
     }
+    return false;
 }
 
 bool check_mate(const Board& board, const Piece& king) {
@@ -194,23 +195,27 @@ bool check_mate(const Board& board, const Piece& king) {
 void promote_pawn(Board& board, const Position pos, const std::string piece_name, std::string color) {
     //find piece based on position
     //based on name create a new piece
-    for(auto p : board.players[0].pieces) {
+    int index = color == "white" ? 0 : 1;
+
+    //check if promotion is valid
+
+    for(auto p : board.players[index].pieces) {
         if (p.name == piece_name && check_postion(pos,p.position)) {
-            std::erase_if(board.players[0].pieces, [&pos](const Piece& p) {
+            std::erase_if(board.players[index].pieces, [&pos](const Piece& p) {
                 return p.position.x == pos.x && p.position.y == pos.y;
             });
             //upgrade
             if (piece_name == "Rook") {
-                board.players[0].pieces.push_back(Piece("Rook", Position(pos.x,pos.y),color));
+                board.players[index].pieces.push_back(Piece("Rook", Position(pos.x,pos.y),color));
             }
             else if (piece_name == "Knight") {
-                board.players[0].pieces.push_back(Piece("Knight", Position(pos.x,pos.y),color));
+                board.players[index].pieces.push_back(Piece("Knight", Position(pos.x,pos.y),color));
             }
             else if (piece_name == "Bishop") {
-                board.players[0].pieces.push_back(Piece("Bishop", Position(pos.x,pos.y),color));
+                board.players[index].pieces.push_back(Piece("Bishop", Position(pos.x,pos.y),color));
             }
             else if (piece_name == "Queen") {
-                board.players[0].pieces.push_back(Piece("Queen", Position(pos.x,pos.y),color));
+                board.players[index].pieces.push_back(Piece("Queen", Position(pos.x,pos.y),color));
             }
             return;
         }

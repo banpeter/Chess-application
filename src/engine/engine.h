@@ -64,6 +64,7 @@ public:
     std::vector<Piece> pieces_pawns;
     std::vector<Piece> pieces;
     std::vector<Moves> moves;//???
+    bool is_checked = false;
     Player(const std::string& name, const std::string color);
     void init_pieces();
     void remove_piece(const Position pos);
@@ -109,9 +110,15 @@ bool validate(Position current_position, Position next_position,Board board);
 std::vector<Position> intersection(const std::vector<Position>& moves1, const std::vector<Position> moves2);
 bool validate_move(const Board& board, Position current_position, Position next_position, std::string color,std::string piece_name);
 bool check_occupied(const Board& board, const Position next_pos);
+void promote_pawn(Board& board, const Position pos, const std::string piece_name, std::string color);
 
 //minmax
 int value(std::string name);
 int evaluate(const Board& board,std::string color);
+
+struct PosChange {
+    Position prev;
+    Position current;
+};
 
 #endif //CHESS_ENGINE_ENGINE_H

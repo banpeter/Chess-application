@@ -81,12 +81,15 @@ void Player::init_pieces() {
 
 
 bool Player::apply_move(const std::string &piece_name, const Position curr_pos, const Position next_pos, Player& other_player) {
-
+    //cehck for check. If it was already check return false
     for (auto &p : pieces) {
         if (p.name == piece_name && check_postion(p.position,curr_pos)) {//TODO and position is hte same
             for (auto valid_move : p.moves_history.back().moves) {
                 if (check_postion(next_pos,valid_move)) {
+                    //save prev pos
                     p.set_position(next_pos);
+                    //check for check
+                    //if check invalidate and revert
                     p.moved = true;
                     return true;
                 }

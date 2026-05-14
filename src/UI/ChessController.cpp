@@ -52,7 +52,13 @@ bool ChessController::isValidMove(ChessPiece* piece, int fromCol, int fromRow, i
 
     //validates. If valid apply, otherwise do not do anything
     bool isValid = board.players[0].apply_move( pieceName, current_position, next_position, board.players[1]);
+    //check for checkmate
 
+    //Run AI move -> check for check mate -> check if it checked the player, If yes bool_is chcecked set true for the player.
+
+    //is check given to the other player. If yes bool_is chcecked set true for the other player.
+
+    //TODO check for checkmate and check if valid
     //TODO MinMAX
     //modify board and return position to update
 
@@ -98,7 +104,9 @@ std::string convert(PieceType selectedType) {
 void ChessController::promotePawnToEngine(int col, int row, PieceColor color, PieceType selectedType) {
     std::string scolor = "white"; //the user is always white
     std::string ptype = convert(selectedType);
-
+    Position current_position = Position(col, row);
+    promote_pawn(board,  current_position, ptype, scolor);
+    //TODO check for checkmate and check
 
     // this method informs the engine about the promotion, so it can update its internal board
 }
