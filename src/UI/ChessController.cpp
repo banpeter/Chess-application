@@ -43,13 +43,13 @@ void ChessController::triggerEngineMove() {
 
 
     if (counter == 0) {
-        emit movePieceCommand(0, 1, 0, 3);
+        emit engineMoved(0, 1, 0, 3);
         counter++;
     } else if (counter == 1) {
-        emit movePieceCommand(4, 1, 4, 3, "queen");
+        emit engineMoved(4, 1, 4, 3, "queen");
         counter++;
     } else {
-        emit movePieceCommand(1, 0, 2, 2);
+        emit engineMoved(1, 0, 2, 2);
     }
 
 }

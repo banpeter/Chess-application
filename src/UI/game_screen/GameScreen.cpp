@@ -76,7 +76,7 @@ GameScreen::GameScreen(QWidget *parent) : QWidget(parent) {
 
     // connections
     connect(backButton, &QPushButton::clicked, this, &GameScreen::backToMenuRequested);
-    connect(controller, &ChessController::movePieceCommand, this, &GameScreen::onEngineMoved);
+    connect(controller, &ChessController::engineMoved, this, &GameScreen::onEngineMoved);
 }
 
 void GameScreen::drawBoard() {

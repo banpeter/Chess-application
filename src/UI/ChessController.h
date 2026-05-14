@@ -22,7 +22,7 @@ public:
 
     
 signals:
-    void movePieceCommand(int fromCol, int fromRow, int toCol, int toRow, QString promotedTo = "");
+    void engineMoved(int fromCol, int fromRow, int toCol, int toRow, QString promotedTo = "");
     
 private:
     QString pieceTypeToString(PieceType type);
