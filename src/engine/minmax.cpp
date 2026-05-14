@@ -85,7 +85,23 @@ int minimax(Board board,int depth, int alpha, int beta,bool is_maximizing, unsig
     if (depth > 50) {
         return evaluate(board,index,index2);
     }
-    //TODO check for checkmate and check
+
+    bool end_game = false;
+    bool is_cheked = false;
+    for (auto piece : board.players[0].pieces) {
+        if (piece.name == "King") {
+            end_game = check_mate(board, piece);
+            is_cheked = check(board,piece);
+            break;
+        }
+    }
+    if (end_game) {
+        return evaluate(board,index,index2);
+    }
+    //mert ha már sakban volt és az új lépés után is sakban van nem jó a lépés -> invalid
+    if (board.players[index].is_checked && is_cheked) {
+        return -1;
+    }
     //if min checked me generae board. Where in new board still checked leav it out
 
 
@@ -272,7 +288,7 @@ PosChange best_move(Board& root, int depth, std::string color, int which_player)
         for (const auto & move : p.moves_history) {
             for (const auto & k : move.moves) {
                 Board pboard= apply_move(root,p.name,k,index,index2);
-                score = minimax(root, depth - 1, alpha, beta, false, index, index2);
+                score = minimax(pboard, depth - 1, alpha, beta, false, index, index2);
                 if (score <= best_score) {
                     best_score = score;
                     current_position.x = p.position.x;

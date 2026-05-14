@@ -51,8 +51,22 @@ bool ChessController::isValidMove(ChessPiece* piece, int fromCol, int fromRow, i
     }
 
     //validates. If valid apply, otherwise do not do anything
-    bool isValid = board.players[0].apply_move( pieceName, current_position, next_position, board.players[1]);
+    bool isValid = board.players[0].apply_move(board, pieceName, current_position, next_position, board.players[1]);
     //check for checkmate
+    std::cout << "Moves generated " << isValid << std::endl;
+    bool end_game = false;
+    bool is_cheked = false;
+    for (auto piece : board.players[0].pieces) {
+        if (piece.name == "King") {
+           end_game = check_mate(board, piece);
+           is_cheked = check(board,piece);
+            break;
+        }
+    }
+    if (is_cheked) {
+        board.players[1].is_checked = true;
+    }
+
 
     //Run AI move -> check for check mate -> check if it checked the player, If yes bool_is chcecked set true for the player.
 
