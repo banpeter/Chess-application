@@ -351,17 +351,19 @@ Moves king_moves(const Board& board, const Piece& chosen_piece) {
             if (piece.name == "Pawn") {
 
                 if (chosen_piece.color == "white") {
-                    move_pawn = &move_pawn_white;
+                    move_pawn = &move_pawn_black;
                 }
                 else if (chosen_piece.color == "black") {
-                    move_pawn = &move_pawn_black;
+                    move_pawn = &move_pawn_white;
                 }
                 if (piece.position.x + (*move_pawn)[1][0] == next_position.x && piece.position.y + (*move_pawn)[1][1]== next_position.y) {
                     attacked = true;
+                    std::cout << "attacked by pawn" << std::endl;
                     break;
                 }
                 if (piece.position.x + (*move_pawn)[2][0] == next_position.x && piece.position.y + (*move_pawn)[2][1]== next_position.y) {
                     attacked = true;
+                    std::cout << "attacked by pawn" << std::endl;
                     break;
                 }
                 continue;

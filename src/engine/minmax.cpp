@@ -108,8 +108,17 @@ int minimax(Board board,int depth, int alpha, int beta,bool is_maximizing, unsig
     for (int i = 0; i < possible_moves.size(); i++) {
         for (int j = 0; j < possible_moves[i].moves.size(); j++) {
             Board pboard= apply_move(board,piece_names[i],possible_moves[i].moves[j],index2,index2);
+            if (index == 0) {
+                //if (piece_names[i] == "Pawn" && ) {
+
+                //}
+            }
+            else {
+
+            }
             //if promote generate all possibility for promotion
             //check for check and checkmate
+
             possible_boards.push_back(pboard);
         }
         for (int j = 0; j < possible_moves[i].moves.size(); j++) {
