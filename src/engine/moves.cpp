@@ -157,13 +157,14 @@ Moves knight_moves(const Board& board, const Piece& chosen_piece) {
         next_position.x += move[0];
         next_position.y += move[1];
         inside = next_position.inside();
-        occupied = check_occupied(board,chosen_piece.position);
+        occupied = check_occupied(board,next_position);
         capture = check_move(board,chosen_piece.position,chosen_piece.color);
-        if (inside && !capture) {
+        if (inside && !occupied && !capture) {
             captures_mask.push_back(0);
             moves_pos.push_back(next_position);
         }
-        else if (inside && capture) {
+
+        else if (inside && occupied && capture) {
 
             captures_mask.push_back(1);
             captures.push_back(next_position);
