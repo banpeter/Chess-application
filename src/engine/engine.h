@@ -25,7 +25,6 @@ struct PosChange {
 
 class Moves {
 public:
-    //moves in one direction, is it check ->King ahs possible move outise of those, otehr pices canhas valide move with the moves in one direction
 
     std::vector<Position> moves;
     std::vector<Position> captures;
@@ -69,7 +68,7 @@ public:
     std::string color;
     std::vector<Piece> pieces_pawns;
     std::vector<Piece> pieces;
-    std::vector<Moves> moves;//???
+    std::vector<Moves> moves;//
     bool is_checked = false;
     Player(const std::string& name, const std::string color);
     void init_pieces();
@@ -114,7 +113,6 @@ bool check_postion(const Position p1, const Position p2);
 bool check_move(const Board& board, const Position current_pos,std::string color);
 bool validate(Position current_position, Position next_position,Board board);
 std::vector<Position> intersection(const std::vector<Position>& moves1, const std::vector<Position> moves2);
-bool validate_move(const Board& board, Position current_position, Position next_position, std::string color,std::string piece_name);
 bool check_occupied(const Board& board, const Position next_pos);
 void promote_pawn(Board& board, const Position pos, const std::string piece_name, std::string color);
 bool check_mate(const Board& board, const Piece& king);

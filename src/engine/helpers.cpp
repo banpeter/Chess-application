@@ -11,9 +11,9 @@ bool check_postion(const Position p1, const Position p2) {
     return false;
 }
 
-//TODO also do overlap checking with the same color
+
 bool check_move(const Board& board, const Position next_pos, std::string color) {
-//saját magára hiszi, hogy capture
+
     int index = color == "white" ? 1 : 0;
     int overlap = 0;
 
@@ -46,54 +46,9 @@ bool check_occupied(const Board& board, const Position next_pos) {
         }
         return false;
     }
-//review, during move generation these constraints are already examined
-bool validate_on_board(Position current_position, Position next_position,Board board, std::string color) {
-
-    //TODO pass these as pointers
-
-    bool inside = true;
-    bool capture = false;
-
-    inside = next_position.inside();
-    capture = check_move(board,current_position,color);//TODO
 
 
-    if (inside && !capture) {
 
-    }
-    else if (inside && capture) {
-
-
-    }
-    else if (!inside) {
-        return false;
-    }
-    return false;
-}
-
-bool validate_move(const Board& board, Position current_position, Position next_position, std::string color,std::string piece_name) {
-    bool on_board = validate_on_board( current_position,  next_position, board,color);
-    int index = color == "white" ? 1 : 0;
-    for (const auto& piece : board.players[index].pieces) {
-        if (piece.name == piece_name) {
-            Moves possible_moves = piece.moves_history.back();
-            for (auto pos : possible_moves.moves) {
-                if (check_postion(pos,next_position)) {
-                    return true;
-                }
-            }
-            for (auto pos : possible_moves.captures) {
-                if (check_postion(pos,next_position)) {
-                    return true;
-                }
-            }
-
-        }
-    }
-
-
-    return false;
-}
 
 int color_to_index(const std::string& color) {
     if (color == "white") {
@@ -118,8 +73,6 @@ std::vector<Position> intersection(const std::vector<Position>& moves1, const st
     }
     return intersection;
 }
-//TODO piece can not move if attacks could happen -> each ,moves has to go until boundary??
-//TODO add resign
 
 //check if
 bool check(const Board& board, const Piece& king) {

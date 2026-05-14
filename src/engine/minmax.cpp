@@ -77,15 +77,9 @@ Board apply_move(Board board,std::string piece_name, Position pos, unsigned int 
     return board;
 }
 
-//TODO add checkmate
+
 int minimax(Board board,int depth, int alpha, int beta,bool is_maximizing, unsigned int index, unsigned int index2) {
 
-    /*
-     * if amximizing curent player is black
-     * if minimizing current player is white
-     */
-
-    //std::cout<< "Depth " << depth << std::endl;
     if (depth >= 5) {
         return evaluate(board,index,index2);
     }
@@ -225,8 +219,7 @@ int minimax(Board board,int depth, int alpha, int beta,bool is_maximizing, unsig
                     possible_boards.push_back(pboard_bishop);
                 }
             }
-            //if promote generate all possibility for promotion
-            //check for check and checkmate
+
             possible_boards.push_back(pboard);
 
         }

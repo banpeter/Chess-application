@@ -36,7 +36,7 @@ Moves rook_moves(const Board& board, const Piece& chosen_piece) {
                 next_position.y--;
             }
 
-            //check inside
+
             inside = next_position.inside();
             occupied = check_occupied(board,next_position);
             capture = check_move(board,next_position,chosen_piece.color);
@@ -57,7 +57,7 @@ Moves rook_moves(const Board& board, const Piece& chosen_piece) {
                 captures_mask.push_back(0);
                 generate = false;
             }
-            moves_section.push_back(next_position);//TODO wrong place
+            moves_section.push_back(next_position);
         }
         moves_sections.push_back(moves_section);
         next_position = chosen_piece.position;
@@ -102,9 +102,7 @@ Moves bishop_moves(const Board& board, const Piece& chosen_piece) {
                 next_position.x++;
                 next_position.y--;
             }
-            //next_position.x++;
-            //next_position.y++;
-            //check inside
+
             inside = next_position.inside();
             occupied = check_occupied(board,next_position);
             capture = check_move(board,next_position,chosen_piece.color);
@@ -319,7 +317,7 @@ Moves king_moves(const Board& board, const Piece& chosen_piece) {
     const Player *p = nullptr;
     const Player *p2 = nullptr;
 
-    //TODO if order change in initialization this brokes
+
     if (chosen_piece.color == "white") {
         p = &board.players[0];
         p2 = &board.players[1];
