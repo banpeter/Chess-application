@@ -23,7 +23,6 @@ public:
     
 signals:
     void movePieceCommand(int fromCol, int fromRow, int toCol, int toRow, QString promotedTo = "");
-    void gameOverCommand(const QString& message);
     
 private:
     QString pieceTypeToString(PieceType type);

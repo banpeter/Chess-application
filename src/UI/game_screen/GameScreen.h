@@ -21,7 +21,6 @@ signals:
 
 public slots:
     void onEngineMoved(int fromCol, int fromRow, int toCol, int toRow, QString promotedTo);
-    void onGameOver(const QString& message);
 
 private slots:
     void onUserMoveRequested(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow);
@@ -31,9 +30,9 @@ private:
     QGraphicsView *boardView;
     QGraphicsScene *boardScene;
 
-    ChessPiece* pieceRegistry[8][8];
+    ChessPiece* pieceRegistry[8][8] = {nullptr};
 
-    PieceColor *currentTurn = new PieceColor(PieceColor::White);
+    PieceColor currentTurn = PieceColor::White;
 
     ChessController* controller;
 
@@ -42,4 +41,5 @@ private:
 
     void promotePawn(int toCol, int toRow, PieceColor color);
     void executeMove(int fromCol, int fromRow, int toCol, int toRow);
+    void gameOver(const QString& message);
 };

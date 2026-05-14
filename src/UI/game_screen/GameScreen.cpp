@@ -1,5 +1,6 @@
 #include "GameScreen.h"
 #include "ChessPiece.h"
+#include <QApplication>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QGraphicsRectItem>
@@ -76,7 +77,6 @@ GameScreen::GameScreen(QWidget *parent) : QWidget(parent) {
     // connections
     connect(backButton, &QPushButton::clicked, this, &GameScreen::backToMenuRequested);
     connect(controller, &ChessController::movePieceCommand, this, &GameScreen::onEngineMoved);
-    connect(controller, &ChessController::gameOverCommand, this, &GameScreen::onGameOver);
 }
 
 void GameScreen::drawBoard() {
@@ -122,10 +122,10 @@ void GameScreen::setupPiece(const QString& svgPath, int col, int row, PieceColor
 
 void GameScreen::onUserMoveRequested(ChessPiece* piece, int fromCol, int fromRow, int toCol, int toRow) {
     
-    if ((piece->getPieceColor() == *currentTurn && controller->isValidMove(piece, fromCol, fromRow, toCol, toRow)) ) {
+    if ((piece->getPieceColor() == currentTurn && controller->isValidMove(piece, fromCol, fromRow, toCol, toRow)) ) {
         executeMove(fromCol, fromRow, toCol, toRow);
         if (controller->isCheckmate(PieceColor::Black)) { // check for checkmate after the user's move
-            emit controller->gameOverCommand("You win! Checkmate!");
+            gameOver("You win! Checkmate!");
         } else {
             controller->triggerEngineMove();
         }
@@ -168,15 +168,25 @@ void GameScreen::onEngineMoved(int fromCol, int fromRow, int toCol, int toRow, Q
         // setup the new piece on the board
         setupPiece(svgPath, toCol, toRow, PieceColor::Black, selectedType);
 
-        // check for checkmate after the promotion
-        if (controller->isCheckmate(PieceColor::White)) {
-            emit controller->gameOverCommand("Checkmate! You lose!");
-        }
+    }
+
+    // check for checkmate after the promotion
+    if (controller->isCheckmate(PieceColor::White)) {
+        gameOver("Checkmate! You lose!");
     }
 }
 
-void GameScreen::onGameOver(const QString &message) {
-    QMessageBox::information(this, "Game over", message);
+void GameScreen::gameOver(const QString &message) {
+    QMessageBox msgBox(this);
+    msgBox.setWindowTitle("Game over");
+    msgBox.setText(message);
+    msgBox.addButton("OK", QMessageBox::AcceptRole);
+    QPushButton *exitButton = msgBox.addButton("Exit application", QMessageBox::RejectRole);
+    msgBox.exec();
+
+    if (msgBox.clickedButton() == exitButton) {
+        qApp->quit();
+    }
 }
 
 
@@ -249,5 +259,5 @@ void GameScreen::executeMove(int fromCol, int fromRow, int toCol, int toRow) {
         }*/
     }
 
-    *currentTurn = (*currentTurn == PieceColor::White) ? PieceColor::Black : PieceColor::White;
+    currentTurn = (currentTurn == PieceColor::White) ? PieceColor::Black : PieceColor::White;
 }
