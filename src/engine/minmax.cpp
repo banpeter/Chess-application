@@ -258,8 +258,7 @@ int minimax(Board board,int depth, int alpha, int beta,bool is_maximizing, unsig
 }
 
 
-// Find the best move from root
-//TODO return position
+
 PosChange best_move(Board& root, int depth, std::string color, int which_player) {
     int best_score = std::numeric_limits<int>::min();
     int best_idx   = -1;
